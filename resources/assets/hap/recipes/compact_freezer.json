@@ -1,0 +1,31 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"XYX",
+		"ZCZ",
+		"XYX"
+	],
+	"key": {
+		"X": {
+			"type": "forge:ore_dict",
+			"ore": "ingotToolSteel"
+		},
+		"Y": {
+			"type": "forge:ore_dict",
+			"ore": "ingotAluminum"
+		},
+		"Z": {
+			"item": "dcs_climate:dcs_coating_tool",
+			"data": 7
+		},
+		"C": {
+			"item": "dcs_climate:dcs_device_freezer",
+			"data": 0
+		}
+	},
+	"result": {
+		"item": "hap:compact_freezer",
+		"count": 1,
+		"data": 0
+	}
+}

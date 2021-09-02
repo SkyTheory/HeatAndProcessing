@@ -1,0 +1,18 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {
+			"particle": "hap:blocks/heat_block"
+		},
+		"model": "hap:heat_block",
+		"uvlock": false
+	},
+	"variants": {
+		"normal": [{
+
+		}],
+		"inventory": [{
+
+		}]
+	}
+}

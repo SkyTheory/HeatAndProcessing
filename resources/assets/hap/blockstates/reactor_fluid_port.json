@@ -1,0 +1,22 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {
+			"particle": "blocks/coal_block"
+		}
+	},
+	"variants": {
+		"facing=north": {
+			"model": "block"
+		},
+		"facing=south": {
+			"model": "block"
+		},
+		"facing=west": {
+			"model": "block"
+		},
+		"facing=east": {
+			"model": "block"
+		}
+	}
+}

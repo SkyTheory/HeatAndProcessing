@@ -1,0 +1,31 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"WWW",
+		"XYX",
+		"ZZZ"
+	],
+	"key": {
+		"W": {
+			"type": "forge:ore_dict",
+			"ore": "ingotSteel"
+		},
+		"X": {
+			"item": "dcs_climate:dcs_device_faucet",
+			"data": 0
+		},
+		"Y": {
+			"item": "dcs_climate:dcs_device_hopper_fluid",
+			"data": 0
+		},
+		"Z": {
+			"type": "forge:ore_dict",
+			"ore": "ingotStainlessSteel"
+		}
+	},
+	"result": {
+		"item": "hap:reactor_fluid_port",
+		"count": 1,
+		"data": 0
+	}
+}

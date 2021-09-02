@@ -1,0 +1,35 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"VVW",
+		"XYW",
+		"ZZZ"
+	],
+	"key": {
+		"V": {
+			"type": "forge:ore_dict",
+			"ore": "blockLead"
+		},
+		"W": {
+			"type": "forge:ore_dict",
+			"ore": "ingotSteel"
+		},
+		"X": {
+			"item": "dcs_climate:dcs_device_heat_exchanger",
+			"data": 0
+		},
+		"Y": {
+			"item": "dcs_climate:dcs_device_reactor",
+			"data": 0
+		},
+		"Z": {
+			"type": "forge:ore_dict",
+			"ore": "ingotStainlessSteel"
+		}
+	},
+	"result": {
+		"item": "hap:reactor_advanced",
+		"count": 1,
+		"data": 0
+	}
+}

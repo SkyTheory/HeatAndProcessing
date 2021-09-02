@@ -1,0 +1,18 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "dcs_climate:dcs_device_shaft_s_steel",
+			"data": 0
+		},
+		{
+			"type": "forge:ore_dict",
+			"ore": "dustMolybdenum"
+		}
+	],
+	"result": {
+		"item": "hap:shaft_straight_steel",
+		"count": 1,
+		"data": 0
+	}
+}

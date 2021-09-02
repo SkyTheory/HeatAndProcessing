@@ -1,0 +1,34 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"item": "dcs_climate:dcs_device_conveyor",
+			"data": 0
+		},
+		{
+			"item": "dcs_climate:dcs_device_conveyor",
+			"data": 0
+		},
+		{
+			"item": "dcs_climate:dcs_device_conveyor",
+			"data": 0
+		},
+		{
+			"item": "dcs_climate:dcs_device_conveyor",
+			"data": 0
+		},
+		{
+			"type": "minecraft:item_nbt",
+			"item": "forge:bucketFilled",
+			"nbt": {
+				"FluidName": "dcs.seed_oil",
+				"Amount": 1000
+			}
+		}
+	],
+	"result": {
+		"item": "hap:conveyor",
+		"count": 4,
+		"data": 0
+	}
+}

@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"XXX",
+		"YZY",
+		"XXX"
+	],
+	"key": {
+		"X": {
+			"type": "forge:ore_dict",
+			"ore": "ingotZinc"
+		},
+		"Y": {
+			"type": "forge:ore_dict",
+			"ore": "bucketWater"
+		},
+		"Z": {
+			"item": "minecraft:dispenser",
+			"data": 0
+		}
+	},
+	"result": {
+		"item": "hap:mist_dispenser",
+		"count": 1,
+		"data": 0
+	}
+}

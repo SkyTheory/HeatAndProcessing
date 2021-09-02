@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"X",
+		"Y"
+	],
+	"key": {
+		"X": {
+			"item": "minecraft:iron_bars",
+			"data": 0
+		},
+		"Y": {
+			"item": "minecraft:lit_pumpkin",
+			"data": 0
+		}
+	},
+	"result": {
+		"item": "hap:pumpkin_lantern",
+		"count": 1,
+		"data": 0
+	}
+}

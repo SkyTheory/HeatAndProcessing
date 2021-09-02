@@ -1,0 +1,60 @@
+# Heat And Processing
+#
+# Creative Tab
+itemGroup.hap=HeatAndProcessing
+#
+# Blocks
+tile.conveyor.name=高速コンベア
+tile.heat_block.name=熱源ブロック
+tile.pumpkin_lantern.name=ミニランタン
+tile.compact_freezer.name=コンパクトフリーザー
+tile.compact_heater.name=ヒートプロデューサー
+tile.mist_dispenser.name=ミストディスペンサー
+tile.reactor_advanced.name=発展化学反応槽
+tile.reactor_storage.name=化学反応層コンテナ
+tile.reactor_fluid_port.name=化学反応層液体搬出入口
+tile.shaft_straight_steel.name=鋼鉄の無減衰シャフト(I型)
+tile.shaft_l_shaped_steel.name=鋼鉄の無減衰シャフト(L型)
+tile.shaft_bifurcated_steel.name=鋼鉄の無減衰シャフト(二又)
+tile.shaft_perpendicular_steel.name=鋼鉄の無減衰シャフト(垂直)
+tile.shaft_t_shaped_steel.name=鋼鉄の無減衰シャフト(T型)
+tile.shaft_x_shaped_steel.name=鋼鉄の無減衰シャフト(X型)
+tile.shaft_straight_sus.name=ステンレスの無減衰シャフト(I型)
+tile.shaft_l_shaped_sus.name=ステンレスの無減衰シャフト(L型)
+tile.shaft_bifurcated_sus.name=ステンレスの無減衰シャフト(二又)
+tile.shaft_perpendicular_sus.name=ステンレスの無減衰シャフト(垂直)
+tile.shaft_t_shaped_sus.name=ステンレスの無減衰シャフト(T型)
+tile.shaft_x_shaped_sus.name=ステンレスの無減衰シャフト(X型)
+tile.smelting_plate.name=オーブン板
+#
+# Items
+item.wrench.name=頑丈なレンチ
+item.coating_molybdenum.name=モリブデン潤滑剤
+#
+# Tips
+hap.tip.config=HeatAndProcessing Config
+hap.tip.heat=HeatTier : %s
+hap.tip.climatecontroller.cool=正面1ブロックを冷却します。
+hap.tip.climatecontroller.heat=正面1ブロックを加熱します。
+hap.tip.climatecontroller.wet=正面1ブロックを加湿します。
+hap.tip.humidity=Humidity : %s
+hap.tip.input=Torque Input
+hap.tip.output=Torque Output
+hap.tip.reactor=自動搬出入機能付き。 （フィルタ設定が必要です。）
+hap.tip.reactor.fluidport=発展化学反応層の左側に設置し、天面または背面のタンクへのアクセスを可能にします。
+hap.tip.reactor.storage=発展化学反応層または液体搬出入口の左側に設置します。
+hap.tip.machine_on=State : オン
+hap.tip.machine_off=State : オフ
+hap.tip.machine_shortage=State : トルク不足
+hap.tip.machine_required=必要トルク : %s
+hap.tip.peg=ペグ : %s
+hap.tip.peg.ceil=天井
+hap.tip.peg.floor=床
+hap.tip.peg.wall=壁
+hap.tip.torque=Torque : %s
+#
+# Config
+hap.config.hud=チャットログを表示中は気候HUDを隠す
+hap.config.shaft=シャフトに対する操作の当たり判定を、中央のブロックの大きさに縮小する
+hap.config.extend=アクセサリの判定範囲をインベントリ全体まで拡張する
+hap.config.count=アクセサリの最大適用個数

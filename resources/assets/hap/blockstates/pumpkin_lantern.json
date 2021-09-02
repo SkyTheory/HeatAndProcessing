@@ -1,0 +1,58 @@
+{
+	"variants": {
+		"facing=north,type=ceil": {
+			"model": "hap:pumpkin_lantern_ceil"
+		},
+		"facing=north,type=floor": {
+			"model": "hap:pumpkin_lantern_floor"
+		},
+		"facing=north,type=wall": {
+			"model": "hap:pumpkin_lantern_wall"
+		},
+		"facing=east,type=ceil": {
+			"model": "hap:pumpkin_lantern_ceil",
+			"y": 90,
+			"uvlock": false
+		},
+		"facing=east,type=floor": {
+			"model": "hap:pumpkin_lantern_floor",
+			"y": 90,
+			"uvlock": false
+		},
+		"facing=east,type=wall": {
+			"model": "hap:pumpkin_lantern_wall",
+			"y": 90,
+			"uvlock": false
+		},
+		"facing=south,type=ceil": {
+			"model": "hap:pumpkin_lantern_ceil",
+			"y": 180,
+			"uvlock": false
+		},
+		"facing=south,type=floor": {
+			"model": "hap:pumpkin_lantern_floor",
+			"y": 180,
+			"uvlock": false
+		},
+		"facing=south,type=wall": {
+			"model": "hap:pumpkin_lantern_wall",
+			"y": 180,
+			"uvlock": false
+		},
+		"facing=west,type=ceil": {
+			"model": "hap:pumpkin_lantern_ceil",
+			"y": 270,
+			"uvlock": false
+		},
+		"facing=west,type=floor": {
+			"model": "hap:pumpkin_lantern_floor",
+			"y": 270,
+			"uvlock": false
+		},
+		"facing=west,type=wall": {
+			"model": "hap:pumpkin_lantern_wall",
+			"y": 270,
+			"uvlock": false
+		}
+	}
+}

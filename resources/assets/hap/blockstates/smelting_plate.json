@@ -1,0 +1,19 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {
+			"particle": "dcs_climate:blocks/machine/ironplate_side"
+		},
+		"model": "hap:smelting_plate"
+	},
+	"variants": {
+		"facing=north,side=true": { "model": "hap:smelting_plate_bottom"},
+		"facing=east,side=true": { "model": "hap:smelting_plate_bottom"},
+		"facing=south,side=true": { "model": "hap:smelting_plate_bottom"},
+		"facing=west,side=true": { "model": "hap:smelting_plate_bottom"},
+		"facing=north,side=false": { "model": "hap:smelting_plate_top"},
+		"facing=east,side=false": { "model": "hap:smelting_plate_top"},
+		"facing=south,side=false": { "model": "hap:smelting_plate_top"},
+		"facing=west,side=false": { "model": "hap:smelting_plate_top"}
+	}
+}

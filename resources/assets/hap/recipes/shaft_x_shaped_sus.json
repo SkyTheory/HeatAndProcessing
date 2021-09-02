@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		" X ",
+		"XYX",
+		" X "
+	],
+	"key": {
+		"X": {
+			"item": "hap:shaft_straight_sus",
+			"data": 0
+		},
+		"Y": {
+			"type": "forge:ore_dict",
+			"ore": "gearToolSteel"
+		}
+	},
+	"result": {
+		"item": "hap:shaft_x_shaped_sus",
+		"count": 1,
+		"data": 0
+	}
+}

@@ -1,0 +1,12 @@
+このmodは以下のライセンスに基づき提供されます。
+表示 - 非営利 - 継承 4.0 国際 (CC BY-NC-SA 4.0)
+https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+このmodはdefeatedcrow氏製作のHeatAndClimateModのアドオンであり、原著者としての権利はdefeatedcrow氏に帰属します。
+Copyright (c) defeatedcrow, 2020
+URL:http://defeatedcrow.jp/modwiki/Mainpage
+
+このmodは現状有姿のまま提供され、一切の動作を保証しません。
+このmodの作者及び著作者、ならびに元となるmodの作者及び著作者は、いかなる場合においてもこのmodの使用その他にって生じる責任を負いません。
+このmodに対する質問、要望はdefeatedcrow氏に送らないでください。
+このライセンスは、Mojang社のEULA条項に代わって適用されるものではありません。ユーザーがマインクラフトを利用するにあたっては、Mojang社のEULAを遵守する必要があります。

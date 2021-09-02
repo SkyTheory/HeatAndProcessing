@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"XXX",
+		"XYX",
+		"XXX"
+	],
+	"key": {
+		"X": {
+			"type": "forge:ore_dict",
+			"ore": "ingotToolSteel"
+		},
+		"Y": {
+			"type": "forge:ore_dict",
+			"ore": "bucketLava"
+		}
+	},
+	"result": {
+		"item": "hap:heat_block",
+		"count": 1,
+		"data": 0
+	}
+}

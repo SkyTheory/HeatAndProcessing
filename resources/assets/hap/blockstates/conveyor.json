@@ -1,0 +1,47 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {
+			"particle": "dcs_climate:blocks/machine/ironplate_side"
+		},
+		"model": "hap:conveyor"
+	},
+	"variants": {
+		"facing=north,floor=false": {
+			"model": "hap:conveyor"
+		},
+		"facing=east,floor=false": {
+			"model": "hap:conveyor",
+			"y": 90,
+			"uvlock": false
+		},
+		"facing=south,floor=false": {
+			"model": "hap:conveyor",
+			"y": 180,
+			"uvlock": false
+		},
+		"facing=west,floor=false": {
+			"model": "hap:conveyor",
+			"y": 270,
+			"uvlock": false
+		},
+		"facing=north,floor=true": {
+			"model": "hap:conveyor_floor"
+		},
+		"facing=east,floor=true": {
+			"model": "hap:conveyor_floor",
+			"y": 90,
+			"uvlock": false
+		},
+		"facing=south,floor=true": {
+			"model": "hap:conveyor_floor",
+			"y": 180,
+			"uvlock": false
+		},
+		"facing=west,floor=true": {
+			"model": "hap:conveyor_floor",
+			"y": 270,
+			"uvlock": false
+		}
+	}
+}

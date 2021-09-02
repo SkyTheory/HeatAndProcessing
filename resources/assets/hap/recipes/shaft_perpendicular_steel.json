@@ -1,0 +1,22 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"XX",
+		"XY"
+	],
+	"key": {
+		"X": {
+			"item": "hap:shaft_straight_steel",
+			"data": 0
+		},
+		"Y": {
+			"type": "forge:ore_dict",
+			"ore": "gearSteel"
+		}
+	},
+	"result": {
+		"item": "hap:shaft_perpendicular_steel",
+		"count": 1,
+		"data": 0
+	}
+}

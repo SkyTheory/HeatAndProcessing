@@ -1,0 +1,23 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"X X",
+		" Y ",
+		" X "
+	],
+	"key": {
+		"X": {
+			"type": "forge:ore_dict",
+			"ore": "ingotSteel"
+		},
+		"Y": {
+			"item": "dcs_climate:dcs_wrench",
+			"data": 0
+		}
+	},
+	"result": {
+		"item": "hap:wrench",
+		"count": 1,
+		"data": 0
+	}
+}
