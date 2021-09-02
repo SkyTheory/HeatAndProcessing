@@ -7,6 +7,14 @@ Copyright (c) defeatedcrow, 2020
 URL:http://defeatedcrow.jp/modwiki/Mainpage
 
 このmodは現状有姿のまま提供され、一切の動作を保証しません。
-このmodの作者及び著作者、ならびに元となるmodの作者及び著作者は、いかなる場合においてもこのmodの使用その他にって生じる責任を負いません。
-このmodに対する質問、要望はdefeatedcrow氏に送らないでください。
-このライセンスは、Mojang社のEULA条項に代わって適用されるものではありません。ユーザーがマインクラフトを利用するにあたっては、Mojang社のEULAを遵守する必要があります。
+このmodの作者及び著作者、ならびにアドオン元となるmodの作者及び著作者は、いかなる場合においてもこのmodの使用その他によって生じる責任を負いません。
+このmodに対する質問、要望などはdefeatedcrow氏に送らないでください。
+このmodをサーバーやmodpack、ゲームプレイの動画などに利用したい場合において、mod作者への通知やmod作者からの許諾などは必要ありません。
+このライセンスは、Mojang社のEULA条項に代わって適用されるものではありません。ユーザーがMinecraftを利用するにあたっては、Mojang社のEULAを遵守する必要があります。
+
+Sorry, full English translation is not available because I only understand English a little bit and cannot guarantee the content.
+However, this mod can use under roughly the same conditions original HeatAndClimateMod.
+Of course, you can use this for modpacks or gameplay footage.
+
+Assets: CC-BY-NC-SA 4.0
+https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
