@@ -19,7 +19,9 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -128,6 +130,18 @@ public class BlockReactorStorage extends BlockContainer implements IWrenchBlock,
 		return new BlockStateContainer(this, new IProperty[] {
 				FACING,
 		});
+	}
+
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+		ItemStack itemStack = new ItemStack(Item.getItemFromBlock(this));
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if (tile instanceof TileReactorStorage) {
+			TileReactorStorage storage = (TileReactorStorage) tile;
+			NBTTagCompound nbt = storage.writeToNBT(new NBTTagCompound());
+			itemStack.getOrCreateSubCompound("BlockEntityTag").merge(nbt);
+		}
+        spawnAsEntity(worldIn, pos, itemStack);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package skytheory.hap.tile;
 
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -62,5 +63,10 @@ public class TileReactorStorage extends TileEntity implements ISidedTileDirectio
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
 	}
 }

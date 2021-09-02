@@ -35,7 +35,7 @@ public class HeatAndProcessing {
 	public static final String MOD_ID = "hap";
 	public static final String MOD_NAME = "HeatAndProcessing";
 	public static final String MC_VERSION = "1.12.2";
-	public static final String MOD_VERSION = "1.0.1";
+	public static final String MOD_VERSION = "1.0.2";
 	public static final String VERSION = MC_VERSION + "-" + MOD_VERSION;
 
 	@Mod.Instance
@@ -60,7 +60,6 @@ public class HeatAndProcessing {
 	public void registerBlocks(RegistryEvent.Register<Block> event) {
 		ResourceRegister.registerAll(event.getRegistry(), BlocksHaP.class, HeatAndProcessing.MOD_ID, CreativeTabsHaP.MAIN);
 	}
-
 
 	@SubscribeEvent
 	public void registerItems(RegistryEvent.Register<Item> event) {

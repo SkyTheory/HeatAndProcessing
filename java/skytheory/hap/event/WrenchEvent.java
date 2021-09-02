@@ -2,6 +2,7 @@ package skytheory.hap.event;
 
 import java.util.List;
 
+import defeatedcrow.hac.api.energy.IWrenchDC;
 import defeatedcrow.hac.core.base.BlockContainerDC;
 import defeatedcrow.hac.core.energy.BlockTorqueBase;
 import net.minecraft.block.Block;
@@ -10,6 +11,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -18,12 +21,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import skytheory.hap.item.ItemWrench;
+import skytheory.lib.item.IWrench;
+import skytheory.lib.util.IWrenchType;
+import skytheory.lib.util.WrenchRegistry;
+import skytheory.lib.util.WrenchTypes;
 
 public class WrenchEvent {
-
-	public static final int COOLTIME = 5;
-	public static int countClient = 0;
-	public static int countServer = 0;
 
 	@SubscribeEvent
 	public static void onLeftClick(PlayerInteractEvent.LeftClickBlock event) {
@@ -38,6 +41,27 @@ public class WrenchEvent {
 				detachDCDevice(world, pos, state, player, stack);
 				removeDCDevice(world, pos, state, player, stack);
 				event.setCanceled(true);
+			}
+		}
+	}
+
+	/*
+	 * HeatAndClimateのレンチでもIWrenchBlockに干渉できるようにしておく
+	 */
+	@SubscribeEvent
+	public static void onRightClick(PlayerInteractEvent.RightClickBlock event) {
+		ItemStack stack = event.getItemStack();
+		if (stack.getItem() instanceof IWrenchDC && !(stack.getItem() instanceof IWrench)) {
+			EntityPlayer player = event.getEntityPlayer();
+			World world = event.getWorld();
+			BlockPos pos = event.getPos();
+			EnumHand hand = event.getHand();
+			EnumFacing facing =event.getFace();
+			IBlockState state = world.getBlockState(pos);
+			Block block = state.getBlock();
+			IWrenchType type = WrenchRegistry.getType(block);
+			if (type == WrenchTypes.WRENCH_BLOCK) {
+				type.interact(player, world, pos, hand, facing);
 			}
 		}
 	}
