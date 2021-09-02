@@ -212,6 +212,11 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 	}
 
 	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+	@Override
 	public void onItemHandlerChanged(IItemHandler handler, int slot) {
 		this.markDirty();
 	}
