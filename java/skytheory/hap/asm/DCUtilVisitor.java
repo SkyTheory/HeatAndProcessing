@@ -16,6 +16,7 @@ import skytheory.hap.config.HaPConfig;
 public class DCUtilVisitor extends ClassVisitor implements Opcodes {
 
 	public static final String TARGET_METHOD = "getPlayerCharm";
+	public static final String TARGET_DUMMY = "getPlayerCharmDummy";
 	public static final String TARGET_DESC = "(Lnet/minecraft/entity/player/EntityPlayer;Ldefeatedcrow/hac/api/magic/CharmType;)Lnet/minecraft/util/NonNullList;";
 	public static final String TARGET_REPLACE = "skytheory/hap/asm/DCUtilVisitor";
 
@@ -58,11 +59,10 @@ public class DCUtilVisitor extends ClassVisitor implements Opcodes {
 	 */
 	public static NonNullList<ItemStack> getPlayerCharm(EntityPlayer player, CharmType type) {
 		NonNullList<ItemStack> charms = NonNullList.create();
-		int count = 0;
 		int range = HaPConfig.charm_extend ? 36 : 18;
 		if (player == null) return charms;
-		for (int i = 9; i < range && count < HaPConfig.charm_max; i++) {
-			ItemStack stack = player.inventory.getStackInSlot(i);
+		for (int index = 9, count = 0; index < range && count < HaPConfig.charm_max; index++) {
+			ItemStack stack = player.inventory.getStackInSlot(index);
 			if (!stack.isEmpty() && stack.getItem() instanceof IJewelCharm) {
 				if (type == null || type.equals(((IJewelCharm) stack.getItem()).getCharmType(stack.getItemDamage()))) {
 					addCharm(charms, stack);
@@ -74,7 +74,7 @@ public class DCUtilVisitor extends ClassVisitor implements Opcodes {
 		if (Loader.isModLoaded("baubles")) {
 			NonNullList<ItemStack> baubles = DCPluginBaubles.getBaublesCharm(player, type);
 			if (!baubles.isEmpty()) {
-				baubles.forEach(charm -> addCharm(charms, charm));
+				baubles.stream().filter(IJewelCharm.class::isInstance).forEach(charm -> addCharm(charms, charm));
 			}
 		}
 
@@ -83,12 +83,13 @@ public class DCUtilVisitor extends ClassVisitor implements Opcodes {
 
 	private static void addCharm(NonNullList<ItemStack> charms, ItemStack stack) {
 		ItemStack charm = stack.copy();
-		ItemStack match = charms.stream().filter(charm::isItemEqual).findFirst().orElse(null);
-		if (match != null) {
+		ItemStack match = charms.stream().filter(charm::isItemEqual).findFirst().orElse(ItemStack.EMPTY);
+		if (!match.isEmpty()) {
 			match.grow(charm.getCount());
 		} else {
 			charm = charm.copy();
 			charms.add(charm);
 		}
 	}
+
 }

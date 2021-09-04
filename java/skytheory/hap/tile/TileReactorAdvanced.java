@@ -1,5 +1,6 @@
 package skytheory.hap.tile;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -17,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -38,6 +40,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import skytheory.hap.HeatAndProcessing;
 import skytheory.hap.init.GuiHandler;
+import skytheory.lib.SkyTheoryLib;
 import skytheory.lib.capability.DataProviderSided;
 import skytheory.lib.capability.datasync.DataSyncHandler;
 import skytheory.lib.capability.datasync.IDataSync;
@@ -52,6 +55,7 @@ import skytheory.lib.tile.ITileInventory;
 import skytheory.lib.tile.ITileTank;
 import skytheory.lib.util.EnumSide;
 import skytheory.lib.util.ItemHandlerUtils;
+import skytheory.lib.util.TickHolder;
 
 
 public class TileReactorAdvanced extends TileTorqueDirectional implements ITickable, ITileInventory, ITileTank, ITileInteract, IDataSync {
@@ -383,15 +387,17 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		FluidStack resultFluid1 = recipe.getOutputFluid();
 		FluidStack resultFluid2 = recipe.getSubOutputFluid();
 		// 出力先に空きがあるかのチェック処理
-		IItemHandler prediction = ItemHandlerUtils.copyOf(itemOutput);
-		if (!ItemHandlerHelper.insertItem(prediction, resultItem1, false).isEmpty()) return false;
-		if (!ItemHandlerHelper.insertItem(prediction, resultItem2, false).isEmpty()) return false;
-		if (resultFluid1 != null && this.tankOutput1.fill(resultFluid1, false) < resultFluid1.amount) return false;
-		if (resultFluid2 != null && this.tankOutput2.fill(resultFluid2, false) < resultFluid2.amount) return false;
+		List<ItemStack> list = new ArrayList<>();
+		ItemHandlerUtils.iterator(itemOutput).forEach((ItemHandlerUtils.SlotProperties slot) -> list.add(slot.getStack()));
+		ItemStack[] mostacks = new ItemStack[list.size()];
+		mostacks = list.toArray(mostacks);
+		NonNullList<ItemStack> nnl = NonNullList.from(ItemStack.EMPTY, mostacks);
+		if (!recipe.matchOutput(nnl, resultFluid1, resultFluid2, nnl.size())) return false;
 		// 実際の加工処理
 		this.consumeItems(recipe.getProcessedInput());
 		this.consumeFluid(recipe.getInputFluid(), tankInput1);
 		this.consumeFluid(recipe.getSubInputFluid(), tankInput2);
+		SkyTheoryLib.LOGGER.debug(TickHolder.serverTicks);
 		ItemHandlerHelper.insertItem(itemOutput, resultItem1, false);
 		// nextFloatでもいいと思うけれど、一応計算式は本家リアクターと同じにしておく
 		if (world.rand.nextInt(100) < MathHelper.ceil(recipe.getSecondaryChance() * 100.0f)) {

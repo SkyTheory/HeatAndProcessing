@@ -1,15 +1,10 @@
 package skytheory.hap.tile;
 
 import java.util.List;
-import java.util.Objects;
 
 import defeatedcrow.hac.api.energy.ITorqueReceiver;
 import defeatedcrow.hac.api.energy.capability.ITorqueHandler;
 import defeatedcrow.hac.api.energy.capability.TorqueCapabilityHandler;
-import defeatedcrow.hac.core.energy.TileTorqueBase;
-import defeatedcrow.hac.machine.block.TileShaft_TA;
-import defeatedcrow.hac.machine.block.TileShaft_TB;
-import defeatedcrow.hac.machine.block.TileShaft_X;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -77,39 +72,6 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 		this.torque = this.nexttorque;
 		this.nexttorque = 0.0f;
 		this.provideTorque();
-	}
-
-	/**
-	 *
-	 * HeatAndClimateはCapabilityにはTorqueを送ってくれないので吸出し処理を自作した<br>
-	 * ……のだが、仕様変更に備えて素直にITorqueReceiverを実装することに<br>
-	 * HaCが仕様を変更し、それが意図した方向でなかった際に備えコードは残しておく
-	 * @deprecated unused
-	 */
-	protected void drawTorque() {
-		for (EnumFacing input : EnumFacing.values()) {
-			if (isInputSide(input)) {
-				BlockPos target = pos.offset(input);
-				TileEntity tile = world.getTileEntity(target);
-				if (Objects.isNull(tile)) continue;
-				EnumFacing toutput = input.getOpposite();
-				if (tile instanceof TileTorqueBase) {
-					ITorqueHandler handler = tile.getCapability(TorqueCapabilityHandler.TORQUE_HANDLER_CAPABILITY, toutput);
-					float amount = handler.provideTorque(handler.getTorqueAmount(), toutput, true);
-					if (tile instanceof TileShaft_TA) {
-						amount *= 0.5f;
-					} else if (tile instanceof TileShaft_TB) {
-						amount *= 0.5f;
-					} else if (tile instanceof TileShaft_X) {
-						amount /= 3;
-					}
-					if (amount > TORQUE_GATE) {
-						float margin = this.getMaxTorque() - this.getNextTorque();
-						this.setNextTorque(this.getNextTorque() + Math.min(margin, amount));
-					}
-				}
-			}
-		}
 	}
 
 	protected void provideTorque() {
