@@ -49,7 +49,7 @@ import skytheory.lib.util.WrenchHelper;
 public class BlockConveyor extends BlockContainer implements IWrenchBlock, IWailaTipBlock {
 
 	public static final IProperty<EnumFacing> FACING = BlockHorizontal.FACING;
-	public static final IProperty<Boolean> FLOOR = PropertyBool.create("floor");
+	public static final IProperty<Boolean> SIDE = PropertyBool.create("side");
 
 	protected static final AxisAlignedBB AABB_CONVEYOR_X = new AxisAlignedBB(0.0d, 0.25d, 0.125d, 1.0d, 0.375d, 0.875d);
 	protected static final AxisAlignedBB AABB_CONVEYOR_Z = new AxisAlignedBB(0.125d, 0.25d, 0.0d, 0.875d, 0.375d, 1.0d);
@@ -66,7 +66,7 @@ public class BlockConveyor extends BlockContainer implements IWrenchBlock, IWail
 		this.setHardness(1.5F);
 		this.setSoundType(SoundType.METAL);
 		this.lightOpacity = 0;
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(FLOOR, false));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(SIDE, false));
 	}
 
 	@Override
@@ -106,25 +106,25 @@ public class BlockConveyor extends BlockContainer implements IWrenchBlock, IWail
 			if (side.getBlock() instanceof BlockReactorAdvanced) {
 				EnumFacing sidefacing = side.getValue(BlockReactorStorage.FACING);
 				if (EnumSide.getSide(sidefacing, f) == EnumSide.LEFT) {
-					return state.withProperty(FACING, sidefacing).withProperty(FLOOR, false);
+					return state.withProperty(FACING, sidefacing).withProperty(SIDE, false);
 				}
 			}
 		}
-		return state.withProperty(FACING, horizontal).withProperty(FLOOR, false);
+		return state.withProperty(FACING, horizontal).withProperty(SIDE, false);
 	}
 
 	public IBlockState getStateFromMeta(int meta) {
 		IBlockState iblockstate = this.getDefaultState();
 		EnumFacing facing = EnumFacing.getHorizontal(meta & 0b0011);
 		boolean floor = (meta & 0b0100) == 0b0100;
-		iblockstate = iblockstate.withProperty(FACING, facing).withProperty(FLOOR, floor);
+		iblockstate = iblockstate.withProperty(FACING, facing).withProperty(SIDE, floor);
 		return iblockstate;
 	}
 
 	public int getMetaFromState(IBlockState state) {
 		EnumFacing facing = state.getValue(FACING);
 		int meta = facing.getHorizontalIndex();
-		if (state.getValue(FLOOR)) meta += 4;
+		if (state.getValue(SIDE)) meta = meta | 0b0100;
 		return meta;
 	}
 
@@ -132,7 +132,7 @@ public class BlockConveyor extends BlockContainer implements IWrenchBlock, IWail
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {
 				FACING,
-				FLOOR
+				SIDE
 		});
 	}
 
@@ -206,7 +206,7 @@ public class BlockConveyor extends BlockContainer implements IWrenchBlock, IWail
 
 	public void onRightClickWithWrench(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side) {
 		if (player.isSneaking()) {
-			WrenchHelper.cycleProperty(world, pos, FLOOR);
+			WrenchHelper.cycleProperty(world, pos, SIDE);
 		} else {
 			WrenchHelper.rotateFacing(world, pos, EnumFacing.UP);
 		}
@@ -235,7 +235,7 @@ public class BlockConveyor extends BlockContainer implements IWrenchBlock, IWail
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		EnumFacing facing = state.getValue(FACING);
-		boolean floor = state.getValue(FLOOR);
+		boolean floor = state.getValue(SIDE);
 		if (floor) {
 			switch (facing.getAxis()) {
 			case X:

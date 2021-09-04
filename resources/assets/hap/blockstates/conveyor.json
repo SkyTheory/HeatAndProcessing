@@ -7,38 +7,38 @@
 		"model": "hap:conveyor"
 	},
 	"variants": {
-		"facing=north,floor=false": {
+		"facing=north,side=false": {
 			"model": "hap:conveyor"
 		},
-		"facing=east,floor=false": {
+		"facing=east,side=false": {
 			"model": "hap:conveyor",
 			"y": 90,
 			"uvlock": false
 		},
-		"facing=south,floor=false": {
+		"facing=south,side=false": {
 			"model": "hap:conveyor",
 			"y": 180,
 			"uvlock": false
 		},
-		"facing=west,floor=false": {
+		"facing=west,side=false": {
 			"model": "hap:conveyor",
 			"y": 270,
 			"uvlock": false
 		},
-		"facing=north,floor=true": {
+		"facing=north,side=true": {
 			"model": "hap:conveyor_floor"
 		},
-		"facing=east,floor=true": {
+		"facing=east,side=true": {
 			"model": "hap:conveyor_floor",
 			"y": 90,
 			"uvlock": false
 		},
-		"facing=south,floor=true": {
+		"facing=south,side=true": {
 			"model": "hap:conveyor_floor",
 			"y": 180,
 			"uvlock": false
 		},
-		"facing=west,floor=true": {
+		"facing=west,side=true": {
 			"model": "hap:conveyor_floor",
 			"y": 270,
 			"uvlock": false

@@ -85,8 +85,9 @@ public class BlockSmeltingPlate extends BlockContainer implements IWrenchBlock {
 	 */
 	public IBlockState getStateFromMeta(int meta) {
 		IBlockState iblockstate = this.getDefaultState();
-		EnumFacing facing = EnumFacing.getHorizontal(meta);
-		iblockstate = iblockstate.withProperty(FACING, facing);
+		EnumFacing facing = EnumFacing.getHorizontal(meta & 0b0011);
+		boolean floor = (meta & 0b0100) == 0b0100;
+		iblockstate = iblockstate.withProperty(FACING, facing).withProperty(SIDE, floor);
 		return iblockstate;
 	}
 
@@ -95,8 +96,9 @@ public class BlockSmeltingPlate extends BlockContainer implements IWrenchBlock {
 	 */
 	public int getMetaFromState(IBlockState state) {
 		EnumFacing facing = state.getValue(FACING);
-		return facing.getHorizontalIndex();
-
+		int meta = facing.getHorizontalIndex();
+		if (state.getValue(SIDE)) meta = meta | 0b0100;
+		return meta;
 	}
 
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

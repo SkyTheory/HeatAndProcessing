@@ -20,7 +20,7 @@ public class ModelConveyor extends TileEntitySpecialRenderer<TileConveyor> imple
 			IBlockState state = tile.getWorld().getBlockState(tile.getPos());
 			float position = tile.getProgress(partialTicks);
 			float height = -1.0f;
-			if (state.getValue(BlockConveyor.FLOOR)) height -= 0.1875f;
+			if (state.getValue(BlockConveyor.SIDE)) height -= 0.1875f;
 			EnumFacing facing = state.getValue(BlockHorizontal.FACING);
 			if (!stack.isEmpty() && facing != null) {
 				GlStateManager.pushMatrix();
