@@ -74,7 +74,7 @@ public class DCUtilVisitor extends ClassVisitor implements Opcodes {
 		if (Loader.isModLoaded("baubles")) {
 			NonNullList<ItemStack> baubles = DCPluginBaubles.getBaublesCharm(player, type);
 			if (!baubles.isEmpty()) {
-				baubles.stream().filter(IJewelCharm.class::isInstance).forEach(charm -> addCharm(charms, charm));
+				baubles.stream().filter(s -> s.getItem() instanceof IJewelCharm).forEach(charm -> addCharm(charms, charm));
 			}
 		}
 
