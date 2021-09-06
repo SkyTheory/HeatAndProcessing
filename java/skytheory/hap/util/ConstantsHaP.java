@@ -22,6 +22,7 @@ public class ConstantsHaP {
 	public static final String TIP_INACTIVE = "hap.tip.machine_off";
 	public static final String TIP_SHORTAGE = "hap.tip.machine_shortage";
 	public static final String TIP_REQUIRED = "hap.tip.machine_required";
+	public static final String TIP_PROGRESS = "hap.tip.machine_progress";
 
 	public static final String TIP_PEG = "hap.tip.peg";
 

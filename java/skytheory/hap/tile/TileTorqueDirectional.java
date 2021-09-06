@@ -6,6 +6,7 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import skytheory.lib.config.Config;
 import skytheory.lib.tile.ISidedTileDirectional;
 import skytheory.lib.util.FacingHelper;
 import skytheory.lib.util.STLibConstants;
@@ -23,7 +24,9 @@ public abstract class TileTorqueDirectional extends TileTorque implements ISided
 	public void getWailaTips(ItemStack stack, List<String> tips, IWailaDataAccessor accessor) {
 		super.getWailaTips(stack, tips, accessor);
 		tips.add(TextUtils.format(STLibConstants.TIP_FACING, this.getFacing().getName()));
-		tips.add(TextUtils.format(STLibConstants.TIP_SIDE, this.getSide(accessor.getSide()).getName()));
+		if (Config.debug_tips) {
+			tips.add(TextUtils.format(STLibConstants.TIP_SIDE, this.getSide(accessor.getSide()).getName()));
+		}
 	}
 
 }

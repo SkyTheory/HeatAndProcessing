@@ -49,6 +49,9 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 
 	public void setTorque(float amount) {this.torque = amount;}
 	public void setNextTorque(float amount) {this.nexttorque = amount;}
+	/**
+	 * Torqueの現在量を取得する
+	 */
 	public float getTorque() {return torque;}
 	public float getNextTorque() {return nexttorque;}
 	public float getFriction() {return TORQUE_FRICTION;}

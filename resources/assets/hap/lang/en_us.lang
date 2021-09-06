@@ -47,6 +47,7 @@ hap.tip.machine_on=State : Active
 hap.tip.machine_off=State : Inactive
 hap.tip.machine_shortage=State : Power Shortage
 hap.tip.machine_required=Required : %s
+hap.tip.machine_progress=Progress : %d%%
 hap.tip.peg=Peg : %s
 hap.tip.peg.ceil=ceil
 hap.tip.peg.floor=floor

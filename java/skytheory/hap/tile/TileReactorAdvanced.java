@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.recipe.IReactorRecipe;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -40,7 +41,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import skytheory.hap.HeatAndProcessing;
 import skytheory.hap.init.GuiHandler;
-import skytheory.lib.SkyTheoryLib;
+import skytheory.hap.util.ConstantsHaP;
 import skytheory.lib.capability.DataProviderSided;
 import skytheory.lib.capability.datasync.DataSyncHandler;
 import skytheory.lib.capability.datasync.IDataSync;
@@ -54,8 +55,9 @@ import skytheory.lib.network.tile.TileSync;
 import skytheory.lib.tile.ITileInventory;
 import skytheory.lib.tile.ITileTank;
 import skytheory.lib.util.EnumSide;
+import skytheory.lib.util.FacingUtils;
 import skytheory.lib.util.ItemHandlerUtils;
-import skytheory.lib.util.TickHolder;
+import skytheory.lib.util.TextUtils;
 
 
 public class TileReactorAdvanced extends TileTorqueDirectional implements ITickable, ITileInventory, ITileTank, ITileInteract, IDataSync {
@@ -101,6 +103,8 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	public boolean[] skipTransferFluid = {true, true, true, true};
 	// 出力先に空きができるまで加工をスキップするフラグ
 	public boolean skipProcessItem;
+	// レシピ判定をスキップするフラグ
+	public boolean skipRecipe;
 
 	@Override
 	public ICapabilityProvider createInventoryProvider() {
@@ -329,7 +333,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 
 	public void updateProcessing() {
 		// レシピに変更がないかをチェック
-		if (this.validateRecipe()) {
+		if ((skipRecipe || this.validateRecipe()) && recipe != null) {
 			if (progress < this.getTorqueProcess() || skipProcessItem) {
 				// Torqueが必要値を満たしているかをチェック
 				if (this.getTorque() >= this.getTorqueRequired()) {
@@ -343,7 +347,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 				// Torqueが必要値に達していれば加工を行う
 				if (this.onProcess()) {
 					// 加工に成功したなら進捗をリセット
-					this.progress = 0;
+					this.progress = 0.0f;
 				} else {
 					// 失敗したなら待機フラグを入れる
 					this.skipProcessItem = true;
@@ -359,6 +363,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	 * インベントリからレシピを判定し、進捗をリセットするかどうかを返す
 	 */
 	public boolean validateRecipe() {
+		this.skipRecipe = true;
 		DCHeatTier heat = this.getHeatTier();
 		FluidStack fluid1 = tankInput1.getFluid();
 		FluidStack fluid2 = tankInput2.getFluid();
@@ -371,8 +376,8 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		ItemStack catalyst = this.itemCatalyst.getStackInSlot(0);
 		IReactorRecipe next = RecipeAPI.registerReactorRecipes.getRecipe(heat, ingredients, fluid1, fluid2, catalyst);
 		IReactorRecipe prev = this.recipe;
-		if (next != null) {
-			this.recipe = next;
+		this.recipe = next;
+		if (recipe != null) {
 			return prev == null || prev == next;
 		}
 		return false;
@@ -397,7 +402,6 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		this.consumeItems(recipe.getProcessedInput());
 		this.consumeFluid(recipe.getInputFluid(), tankInput1);
 		this.consumeFluid(recipe.getSubInputFluid(), tankInput2);
-		SkyTheoryLib.LOGGER.debug(TickHolder.serverTicks);
 		ItemHandlerHelper.insertItem(itemOutput, resultItem1, false);
 		// nextFloatでもいいと思うけれど、一応計算式は本家リアクターと同じにしておく
 		if (world.rand.nextInt(100) < MathHelper.ceil(recipe.getSecondaryChance() * 100.0f)) {
@@ -563,6 +567,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 			TileSync.sendToClient(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
 			if (handler == this.itemFluidContainer) this.skipTransferFluid[slot] = false;
 			if (handler == this.itemOutput) this.skipProcessItem = false;
+			this.skipRecipe = false;
 		}
 	}
 
@@ -572,11 +577,27 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		if (!world.isRemote) {
 			TileSync.sendToClient(this, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
 			this.skipProcessItem = false;
+			this.skipRecipe = false;
 		}
 	}
 
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
+	}
+
+	@Override
+	public void getWailaTips(ItemStack stack, List<String> tips, IWailaDataAccessor accessor) {
+		super.getWailaTips(stack, tips, accessor);
+		TileSync.request(this, DataSyncHandler.SYNC_DATA_CAPABILITY, FacingUtils.SET_SINGLE_NULL);
+		float torque = this.getTorque();
+		if (torque >= TORQUE_REQUIRED) {
+			int percentage = MathHelper.floor((progress / this.getTorqueProcess()) * 100.0f);
+			tips.add(TextUtils.format(ConstantsHaP.TIP_ACTIVE));
+			tips.add(TextUtils.format(ConstantsHaP.TIP_PROGRESS, percentage));
+		} else {
+			tips.add(TextUtils.format(ConstantsHaP.TIP_SHORTAGE));
+			tips.add(TextUtils.format(ConstantsHaP.TIP_REQUIRED, String.format("%.2f", this.getTorqueRequired())));
+		}
 	}
 }

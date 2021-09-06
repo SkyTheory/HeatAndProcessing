@@ -47,6 +47,7 @@ hap.tip.machine_on=State : オン
 hap.tip.machine_off=State : オフ
 hap.tip.machine_shortage=State : トルク不足
 hap.tip.machine_required=必要トルク : %s
+hap.tip.machine_progress=進捗 : %d%%
 hap.tip.peg=ペグ : %s
 hap.tip.peg.ceil=天井
 hap.tip.peg.floor=床
