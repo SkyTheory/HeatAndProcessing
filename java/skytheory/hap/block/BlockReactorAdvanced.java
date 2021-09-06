@@ -101,9 +101,10 @@ public class BlockReactorAdvanced extends BlockTorque {
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		if (ClimateCore.proxy.isShiftKeyDown()) {
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Requirement ===");
-			tooltip.add(DCName.TORQUE.getLocalizedName() + ": 1024.0F /cycle");
+			tooltip.add(String.format("64.0+ Torque/s"));
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Output ===");
 			tooltip.add(DCName.OUTPUT_ITEM.getLocalizedName());
+			tooltip.add("1024.0F /cycle");
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Tips ===");
 			tooltip.add(I18n.format("dcs.tip.reactor"));
 			tooltip.add(I18n.format(ConstantsHaP.TIP_REACTOR));
