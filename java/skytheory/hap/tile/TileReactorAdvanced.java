@@ -392,12 +392,20 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		FluidStack resultFluid1 = recipe.getOutputFluid();
 		FluidStack resultFluid2 = recipe.getSubOutputFluid();
 		// 出力先に空きがあるかのチェック処理
+		// アイテム部分
 		List<ItemStack> list = new ArrayList<>();
 		ItemHandlerUtils.iterator(itemOutput).forEach((ItemHandlerUtils.SlotProperties slot) -> list.add(slot.getStack()));
 		ItemStack[] mostacks = new ItemStack[list.size()];
 		mostacks = list.toArray(mostacks);
 		NonNullList<ItemStack> nnl = NonNullList.from(ItemStack.EMPTY, mostacks);
-		if (!recipe.matchOutput(nnl, resultFluid1, resultFluid2, nnl.size())) return false;
+		if (!recipe.matchOutput(nnl, tankOutput1.getFluid(), tankOutput2.getFluid(), nnl.size())) return false;
+		// 液体部分
+		if (resultFluid1 != null) {
+			if (tankOutput1.fill(resultFluid1, false) != resultFluid1.amount) return false;
+		}
+		if (resultFluid2 != null) {
+			if (tankOutput2.fill(resultFluid2, false) != resultFluid2.amount) return false;
+		}
 		// 実際の加工処理
 		this.consumeItems(recipe.getProcessedInput());
 		this.consumeFluid(recipe.getInputFluid(), tankInput1);
@@ -538,6 +546,10 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		this.progress = MathHelper.clamp(compound.getFloat(KEY_PROGRESS), 0.0f, TORQUE_PROCESS);
 		if (compound.hasKey(KEY_HEAT_TIER, Constants.NBT.TAG_INT)) {
 			this.heatTier = DCHeatTier.getTypeByID(compound.getInteger(KEY_HEAT_TIER));
+		}
+		if (this.hasWorld() && !this.world.isRemote) {
+			this.skipProcessItem = false;
+			this.skipRecipe = false;
 		}
 		this.markDirty();
 	}

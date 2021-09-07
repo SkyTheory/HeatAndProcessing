@@ -9,6 +9,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 import skytheory.hap.HeatAndProcessing;
 import skytheory.hap.util.ConstantsHaP;
 import skytheory.lib.SkyTheoryLib;
@@ -42,12 +44,19 @@ public class HaPConfig {
 	}
 
 	public static void initConfig(Configuration cfg) {
-		hide_hud = cfg.getBoolean("AutoHideHUD", Configuration.CATEGORY_GENERAL, true, I18n.format(ConstantsHaP.DESC_HUD));
-		shrink_shaft = cfg.getBoolean("ShrinkShaftHitBox", Configuration.CATEGORY_GENERAL, true, I18n.format(ConstantsHaP.DESC_SHAFT));
+		hide_hud = cfg.getBoolean("AutoHideHUD", Configuration.CATEGORY_GENERAL, true, format(ConstantsHaP.DESC_HUD));
+		shrink_shaft = cfg.getBoolean("ShrinkShaftHitBox", Configuration.CATEGORY_GENERAL, true, format(ConstantsHaP.DESC_SHAFT));
 		if (!hide_hud) {
 			AdvancedHUDEvent.enable = CoreConfigDC.enableAdvHUD;
 		}
-		charm_extend = cfg.getBoolean("ExtendCharmSearch", Configuration.CATEGORY_GENERAL, false, I18n.format(ConstantsHaP.DESC_EXTEND));
-		charm_max = cfg.getInt("MaxCharms", Configuration.CATEGORY_GENERAL, 9, 0, 27, I18n.format(ConstantsHaP.DESC_COUNT));
+		charm_extend = cfg.getBoolean("ExtendCharmSearch", Configuration.CATEGORY_GENERAL, false, format(ConstantsHaP.DESC_EXTEND));
+		charm_max = cfg.getInt("MaxCharms", Configuration.CATEGORY_GENERAL, 9, 0, 27, format(ConstantsHaP.DESC_COUNT));
+	}
+
+	public static String format(String txt) {
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			return I18n.format(txt);
+		}
+		return txt;
 	}
 }
