@@ -5,58 +5,58 @@ import java.util.List;
 
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.AdvancedHUDEvent;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.IConfigElement;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import skytheory.hap.HeatAndProcessing;
 import skytheory.hap.util.ConstantsHaP;
-import skytheory.lib.SkyTheoryLib;
 
 public class HaPConfig {
 
-	public static boolean hide_hud;
-	public static boolean shrink_shaft;
+	public static final String CATEGORY_CHARM = "charm";
+	public static final String CATEGORY_BLOCK = "block";
+	public static final String CATEGORY_HUD = "hud";
+	public static final String CATEGORY_RECIPE = "recipe";
+
+	public static Configuration CONFIG;
+
+	public static boolean asm_charm;
 	public static boolean charm_extend;
 	public static int charm_max;
+	public static boolean shrink_shaft;
+	public static boolean hide_hud;
+	public static boolean recipe_reactor;
 
 	public static List<IConfigElement> getConfigElements() {
 		List<IConfigElement> elements = new ArrayList<>();
-		Configuration config = HeatAndProcessing.proxy.config;
-		elements.addAll(new ConfigElement(config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements());
+		elements.add(new ConfigElement(CONFIG.get(CATEGORY_BLOCK, "ShrinkShaftHitBox", true, "Shrink shaft hitbox to center box size.")));
+		elements.add(new ConfigElement(CONFIG.get(CATEGORY_CHARM, "AllowASMforCharms", false, "Allow to use ASM for charm. If this set to false, the charm settings will not work.").setRequiresMcRestart(true)));
+		elements.add(new ConfigElement(CONFIG.get(CATEGORY_CHARM, "ExtendCharmSearch", false, "Search charm in all of inventory.")));
+		elements.add(new ConfigElement(CONFIG.get(CATEGORY_CHARM, "MaxCharms", 9, "Max count of charms to apply.", 0, 27)));
+		elements.add(new ConfigElement(CONFIG.get(CATEGORY_HUD, "AutoHideHUD", true, "Hide climate HUD while viewing chat log.")));
+		elements.add(new ConfigElement(CONFIG.get(CATEGORY_RECIPE, "ReactorRecipe", true, "Enable some alchemical reactor recipes.").setRequiresMcRestart(true)));
 		return elements;
 	}
 
-	public static void readConfig() {
-		Configuration config = HeatAndProcessing.proxy.config;
-		try {
-			config.load();
-			initConfig(config);
-		} catch (Exception e) {
-			SkyTheoryLib.LOGGER.error(e);
-		} finally {
-			if (config.hasChanged()) {
-				config.save();
-			}
-		}
+	public static void init(Configuration cfg) {
+		CONFIG = cfg;
+		CONFIG.load();
+		read();
+		save();
 	}
 
-	public static void initConfig(Configuration cfg) {
-		hide_hud = cfg.getBoolean("AutoHideHUD", Configuration.CATEGORY_GENERAL, true, format(ConstantsHaP.DESC_HUD));
-		shrink_shaft = cfg.getBoolean("ShrinkShaftHitBox", Configuration.CATEGORY_GENERAL, true, format(ConstantsHaP.DESC_SHAFT));
-		if (!hide_hud) {
-			AdvancedHUDEvent.enable = CoreConfigDC.enableAdvHUD;
-		}
-		charm_extend = cfg.getBoolean("ExtendCharmSearch", Configuration.CATEGORY_GENERAL, false, format(ConstantsHaP.DESC_EXTEND));
-		charm_max = cfg.getInt("MaxCharms", Configuration.CATEGORY_GENERAL, 9, 0, 27, format(ConstantsHaP.DESC_COUNT));
+	public static void read() {
+		asm_charm  = CONFIG.getBoolean("AllowASMforCharms", CATEGORY_CHARM, false, "Allow to use ASM for charm. If this set to false, the charm settings will not work.", ConstantsHaP.DESC_ASM_CHARM);
+		charm_extend = CONFIG.getBoolean("ExtendCharmSearch", CATEGORY_CHARM, false, "Search charm in all of inventory.", ConstantsHaP.DESC_EXTEND);
+		charm_max = CONFIG.getInt("MaxCharms", CATEGORY_CHARM, 9, 0, 27, "Max count of charms to apply.", ConstantsHaP.DESC_COUNT);
+		shrink_shaft = CONFIG.getBoolean("ShrinkShaftHitBox", CATEGORY_BLOCK, true, "Shrink shaft hitbox to center box size.", ConstantsHaP.DESC_SHAFT);
+		hide_hud = CONFIG.getBoolean("AutoHideHUD", CATEGORY_HUD, true, "Hide climate HUD while viewing chat log.", ConstantsHaP.DESC_HUD);
+		recipe_reactor = CONFIG.getBoolean("ReactorRecipe", CATEGORY_RECIPE, true, "Enable some alchemical reactor recipes.", ConstantsHaP.DESC_RECIPE);
+
+		if (!hide_hud) AdvancedHUDEvent.enable = CoreConfigDC.enableAdvHUD;
 	}
 
-	public static String format(String txt) {
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			return I18n.format(txt);
-		}
-		return txt;
+	public static void save() {
+		CONFIG.save();
 	}
+
 }

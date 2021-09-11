@@ -9,9 +9,9 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.food.FoodInit;
 import defeatedcrow.hac.magic.MagicInit;
 import defeatedcrow.hac.main.MainInit;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import skytheory.hap.config.HaPConfig;
 import skytheory.hap.init.ItemsHaP;
 import skytheory.lib.SkyTheoryLib;
 
@@ -29,7 +29,7 @@ public class ReactorRecipes {
 
 	// 真鍮と硫黄と鉛を黄金にする マグナム・オパス・イン・"アル"ケミカルリアクター！
 	public static IReactorRecipe alchemic_conversion = new ReactorRecipeBuilder()
-			.outputItem(new ItemStack(Items.GOLD_INGOT))
+			.outputItem(new ItemStack(MainInit.oreItem, 1, 8))
 			.inputItem(
 					OreDictionary.getOres("ingotBrass"),
 					OreDictionary.getOres("ingotLead"),
@@ -111,7 +111,7 @@ public class ReactorRecipes {
 			.build();
 
 	public static void register() {
-		if (RecipeAPI.isLoaded) {
+		if (HaPConfig.recipe_reactor && RecipeAPI.isLoaded) {
 			register(coating_molybdenum);
 			register(alchemic_conversion);
 			register(activate_white);

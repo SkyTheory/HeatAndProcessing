@@ -5,10 +5,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import skytheory.hap.container.ContainerCokeOven;
 import skytheory.hap.container.ContainerReactor;
 import skytheory.hap.container.ContainerReactorStorage;
+import skytheory.hap.gui.GuiCokeOven;
 import skytheory.hap.gui.GuiReactor;
 import skytheory.hap.gui.GuiReactorStorage;
+import skytheory.hap.tile.TileCokeOven;
 import skytheory.hap.tile.TileReactorAdvanced;
 import skytheory.hap.tile.TileReactorStorage;
 
@@ -28,6 +31,9 @@ public class GuiHandler implements IGuiHandler {
 			if (tile instanceof TileReactorStorage) {
 				return new ContainerReactorStorage(player, (TileReactorStorage) tile);
 			}
+			if (tile instanceof TileCokeOven) {
+				return new ContainerCokeOven(player, (TileCokeOven) tile);
+			}
 		}
 		return null;
 	}
@@ -41,6 +47,9 @@ public class GuiHandler implements IGuiHandler {
 			}
 			if (tile instanceof TileReactorStorage) {
 				return new GuiReactorStorage(player, (TileReactorStorage) tile);
+			}
+			if (tile instanceof TileCokeOven) {
+				return new GuiCokeOven(player, (TileCokeOven) tile);
 			}
 		}
 		return null;

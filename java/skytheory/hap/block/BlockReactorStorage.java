@@ -25,9 +25,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -133,15 +135,15 @@ public class BlockReactorStorage extends BlockContainer implements IWrenchBlock,
 	}
 
 	@Override
-	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ItemStack itemStack = new ItemStack(Item.getItemFromBlock(this));
-		TileEntity tile = worldIn.getTileEntity(pos);
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileReactorStorage) {
 			TileReactorStorage storage = (TileReactorStorage) tile;
 			NBTTagCompound nbt = storage.writeToNBT(new NBTTagCompound());
 			itemStack.getOrCreateSubCompound("BlockEntityTag").merge(nbt);
 		}
-        spawnAsEntity(worldIn, pos, itemStack);
+		drops.add(itemStack);
 	}
 
 	@Override

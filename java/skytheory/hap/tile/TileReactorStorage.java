@@ -9,6 +9,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import skytheory.hap.HeatAndProcessing;
 import skytheory.hap.init.GuiHandler;
@@ -16,14 +17,24 @@ import skytheory.lib.capability.itemhandler.ItemAccessor;
 import skytheory.lib.capability.itemhandler.ItemHandler;
 import skytheory.lib.capability.itemhandler.ItemProviderSided;
 import skytheory.lib.capability.itemhandler.MultiItemHandler;
+import skytheory.lib.network.tile.TileSync;
 import skytheory.lib.tile.ISidedTileDirectional;
 import skytheory.lib.tile.ITileInventory;
 import skytheory.lib.util.EnumSide;
+import skytheory.lib.util.FacingUtils;
 
 public class TileReactorStorage extends TileEntity implements ISidedTileDirectional, ITileInventory, ITileInteract {
 
 	public IItemHandler input;
 	public IItemHandler output;
+
+	@Override
+	public void setWorld(World worldIn) {
+		super.setWorld(worldIn);
+		if (worldIn.isRemote) {
+			TileSync.request(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, FacingUtils.SET_SINGLE_NULL);
+		}
+	}
 
 	@Override
 	public ICapabilityProvider createInventoryProvider() {
@@ -57,6 +68,11 @@ public class TileReactorStorage extends TileEntity implements ISidedTileDirectio
 	}
 
 	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+	@Override
 	public boolean onRightClick(World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing) {
 		if (hand == EnumHand.MAIN_HAND) {
 			player.openGui(HeatAndProcessing.INSTANCE, GuiHandler.TILE_GUI, world, pos.getX(), pos.getY(), pos.getZ());
@@ -65,8 +81,4 @@ public class TileReactorStorage extends TileEntity implements ISidedTileDirectio
 		return false;
 	}
 
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return oldState.getBlock() != newState.getBlock();
-	}
 }

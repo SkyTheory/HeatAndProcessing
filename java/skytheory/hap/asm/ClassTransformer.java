@@ -5,6 +5,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+import skytheory.hap.config.HaPConfig;
 
 public class ClassTransformer implements IClassTransformer {
 
@@ -12,8 +13,10 @@ public class ClassTransformer implements IClassTransformer {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
-		if (name.equals(TARGET_DCUTIL)) {
+		if (name.equals(TARGET_DCUTIL) && HaPConfig.asm_charm) {
 			ClassReader reader = new ClassReader(basicClass);
+			// 覚書：もしかしたらCOMPUTE_FRAMESがあればCOMPUT_MAXSは要らない？
+			// 一応、書き換えることがあるならASMのドキュメントを読んでおくこと
 			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 			ClassVisitor visitor = new DCUtilVisitor(writer);
 			reader.accept(visitor, ClassReader.EXPAND_FRAMES);

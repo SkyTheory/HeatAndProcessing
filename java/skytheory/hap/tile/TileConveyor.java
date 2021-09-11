@@ -48,10 +48,17 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 	private int progress = 0;
 	private int prevProgress = 0;
 	private boolean skip = false;
-	private boolean sync = false;
 
 	private ItemHandler input;
 	private ItemHandler output;
+
+	@Override
+	public void setWorld(World worldIn) {
+		super.setWorld(worldIn);
+		if (worldIn.isRemote) {
+			TileSync.request(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, FacingUtils.SET_SINGLE_NULL);
+		}
+	}
 
 	@Override
 	public ICapabilityProvider createInventoryProvider() {
@@ -78,31 +85,7 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 
 	@Override
 	public void update() {
-		if (this.world.isRemote) {
-			updateClient();
-		} else {
-			updateServer();
-		}
-	}
-
-	@Override
-	public void markDirty() {
-		super.markDirty();
-		if (!world.isRemote) {
-			TileSync.sendToClient(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-			TileSync.sendToClient(this, DataSyncHandler.SYNC_DATA_CAPABILITY);
-		}
-	}
-
-	public void updateClient() {
-		// TileEntityの読み込み直後のみ、同期をリクエストする
-		if (!sync) {
-			sync = true;
-			TileSync.request(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, FacingUtils.SET_SINGLE_NULL);
-		}
-	}
-
-	public void updateServer() {
+		if (world.isRemote) return;
 		this.lastUpdated = TickHolder.serverTicks;
 		if (skip) {
 			skip = false;
@@ -146,6 +129,15 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 		}
 		if (prevProgress != progress) {
 			this.markDirty();
+		}
+	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		if (!world.isRemote) {
+			TileSync.sendToClient(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+			TileSync.sendToClient(this, DataSyncHandler.SYNC_DATA_CAPABILITY);
 		}
 	}
 

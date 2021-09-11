@@ -15,7 +15,8 @@ public class PluginJEI implements IModPlugin {
 	@Override
 	public void register(IModRegistry registry) {
 		DCsJEIPluginLists.reactors.add(new ItemStack(ItemsHaP.reactor_advanced));
-		registry.addRecipeCatalyst(new ItemStack(ItemsHaP.reactor_advanced), DCsJEIPlugin.REACTOR_UID);
+		// 覚書：レシピのタブのアイコンがAdvanced Reactorに変わる原因が判明するまで保留
+//		registry.addRecipeCatalyst(new ItemStack(ItemsHaP.reactor_advanced), DCsJEIPlugin.REACTOR_UID);
 		registry.addRecipeClickArea(GuiReactor.class, 47, 57, 11, 20, DCsJEIPlugin.REACTOR_UID);
 	}
 }

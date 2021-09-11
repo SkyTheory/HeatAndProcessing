@@ -17,6 +17,7 @@ public class ItemsHaP {
 	public static Item conveyor = new ItemBlock(BlocksHaP.conveyor);
 	public static Item heat_block = new ItemBlock(BlocksHaP.heat_block);
 	public static Item pumpkin_lantern = new ItemBlock(BlocksHaP.pumpkin_lantern);
+	public static Item water_collector = new ItemBlock(BlocksHaP.water_collector);
 
 	public static Item compact_freezer = new ItemBlockRotational(BlocksHaP.compact_freezer, true);
 	public static Item compact_heater = new ItemBlockRotational(BlocksHaP.compact_heater, true);

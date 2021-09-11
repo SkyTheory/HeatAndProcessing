@@ -1,8 +1,8 @@
 package skytheory.hap.init;
 
 import skytheory.hap.tile.TileCompactFreezer;
-import skytheory.hap.tile.TileConveyor;
 import skytheory.hap.tile.TileCompactHeater;
+import skytheory.hap.tile.TileConveyor;
 import skytheory.hap.tile.TileMistDispenser;
 import skytheory.hap.tile.TileReactorAdvanced;
 import skytheory.hap.tile.TileReactorFluidPort;
@@ -14,11 +14,13 @@ import skytheory.hap.tile.TileShaftStraight;
 import skytheory.hap.tile.TileShaftTShaped;
 import skytheory.hap.tile.TileShaftXShaped;
 import skytheory.hap.tile.TileSmeltingPlate;
+import skytheory.hap.tile.TileWaterCollector;
 
 public class TileEntitiesHaP {
 
 	public static Class<TileConveyor> conveyor = TileConveyor.class;
 	public static Class<TileSmeltingPlate> smelting_plate = TileSmeltingPlate.class;
+	public static Class<TileWaterCollector> water_collector = TileWaterCollector.class;
 
 	public static Class<TileCompactFreezer> compact_freezer = TileCompactFreezer.class;
 	public static Class<TileCompactHeater> compact_heater = TileCompactHeater.class;

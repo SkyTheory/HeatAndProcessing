@@ -2,8 +2,8 @@ package skytheory.hap.init;
 
 import net.minecraft.block.Block;
 import skytheory.hap.block.BlockCompactFreezer;
-import skytheory.hap.block.BlockConveyor;
 import skytheory.hap.block.BlockCompactHeater;
+import skytheory.hap.block.BlockConveyor;
 import skytheory.hap.block.BlockHeatSource;
 import skytheory.hap.block.BlockMistDispenser;
 import skytheory.hap.block.BlockPumpkinLantern;
@@ -17,12 +17,14 @@ import skytheory.hap.block.BlockShaftStraight;
 import skytheory.hap.block.BlockShaftTShaped;
 import skytheory.hap.block.BlockShaftXShaped;
 import skytheory.hap.block.BlockSmeltingPlate;
+import skytheory.hap.block.BlockWaterCollector;
 
 public class BlocksHaP {
 
 	public static Block conveyor = new BlockConveyor();
 	public static Block heat_block = new BlockHeatSource();
 	public static Block pumpkin_lantern = new BlockPumpkinLantern();
+	public static Block water_collector = new BlockWaterCollector();
 
 	public static Block compact_freezer = new BlockCompactFreezer();
 	public static Block compact_heater = new BlockCompactHeater();

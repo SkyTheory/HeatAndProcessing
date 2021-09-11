@@ -112,30 +112,26 @@ public class BlockPumpkinLantern extends Block implements IWrenchBlock, IWailaTi
 	 */
 	public IBlockState getStateFromMeta(int meta) {
 		IBlockState iblockstate = this.getDefaultState();
-		if (meta >= 8) {
+		if ((meta & 0b1000) == 0b1000) {
 			iblockstate = iblockstate.withProperty(PEG, EnumPeg.FLOOR);
-		} else if (meta >= 4) {
+		} else if ((meta & 0b0100) == 0b0100) {
 			iblockstate = iblockstate.withProperty(PEG, EnumPeg.WALL);
 		}
-		int index = meta % 4;
-		EnumFacing facing = EnumFacing.getHorizontal(index);
+		EnumFacing facing = EnumFacing.getHorizontal(meta & 0b0011);
 		iblockstate = iblockstate.withProperty(FACING, facing);
 		return iblockstate;
 	}
 
-	/**
-	 * Convert the BlockState into the correct metadata value
-	 */
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
 		EnumFacing facing = state.getValue(FACING);
 		i = i + facing.getHorizontalIndex();
 		EnumPeg peg = state.getValue(PEG);
 		if (peg == EnumPeg.WALL) {
-			i = i + 4;
+			i = i | 0b0100;
 		}
 		if (peg == EnumPeg.FLOOR) {
-			i = i + 8;
+			i = i | 0b1000;
 		}
 		return i;
 	}

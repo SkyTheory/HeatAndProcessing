@@ -66,7 +66,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	public static final String KEY_TANK_LOCK = "TankLock";
 	public static final String KEY_TANK_STACKS = "TankStack";
 	public static final String KEY_HEAT_TIER = "HeatTier";
-	public static final String KEY_PROGRESS = "progress";
+	public static final String KEY_PROGRESS = "Progress";
 	public static final int TANK_CAPACITY = 4000;
 
 	// Reactorの所要時間はレシピに係わらず、2tick毎の受付、1024Torqueで一定
@@ -105,6 +105,14 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	public boolean skipProcessItem;
 	// レシピ判定をスキップするフラグ
 	public boolean skipRecipe;
+
+	@Override
+	public void setWorld(World worldIn) {
+		super.setWorld(worldIn);
+		if (worldIn.isRemote) {
+			TileSync.request(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, FacingUtils.SET_SINGLE_NULL);
+		}
+	}
 
 	@Override
 	public ICapabilityProvider createInventoryProvider() {

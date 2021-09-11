@@ -16,7 +16,6 @@ import skytheory.hap.config.HaPConfig;
 public class DCUtilVisitor extends ClassVisitor implements Opcodes {
 
 	public static final String TARGET_METHOD = "getPlayerCharm";
-	public static final String TARGET_DUMMY = "getPlayerCharmDummy";
 	public static final String TARGET_DESC = "(Lnet/minecraft/entity/player/EntityPlayer;Ldefeatedcrow/hac/api/magic/CharmType;)Lnet/minecraft/util/NonNullList;";
 	public static final String TARGET_REPLACE = "skytheory/hap/asm/DCUtilVisitor";
 
