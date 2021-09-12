@@ -105,7 +105,7 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 			}
 			boolean extract = progress >= PROGRESS_COUNT;
 			boolean process = progress >= PROGRESS_COUNT / 2;
-			if (process && !ItemHandlerUtils.isEmpty(input)) {
+			if (process && !ItemHandlerUtils.isEmpty(input) && ItemHandlerUtils.isEmpty(output)) {
 				// アイテムが中央まで来た時点で精錬を試みる
 				this.processItem();
 			}
@@ -146,13 +146,15 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 		double y = (double) targetPos.getY() + 0.5d;
 		double z = (double) targetPos.getZ() + 0.5d;
 		for (int i = 0; i < output.getSlots(); i++) {
-			ItemStack stack = output.extractInternal(i, 64, true);
-			EntityItem drop = new EntityItem(world, x, y, z, stack);
-			drop.motionX = 0.0D;
-			drop.motionY = 0.0D;
-			drop.motionZ = 0.0D;
-			if (world.spawnEntity(drop)) {
-				output.extractItem(i, 64, false);
+			ItemStack stack = output.getStackInSlot(i);
+			if (!stack.isEmpty()) {
+				EntityItem drop = new EntityItem(world, x, y, z, stack);
+				drop.motionX = 0.0D;
+				drop.motionY = 0.0D;
+				drop.motionZ = 0.0D;
+				if (world.spawnEntity(drop)) {
+					output.setStackInSlot(i, ItemStack.EMPTY);
+				}
 			}
 		}
 		return ItemHandlerUtils.isEmpty(output);
@@ -164,55 +166,47 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 		if (tile != null) {
 			IItemHandler targetHandler = ItemHandlerUtils.getItemHandler(tile, facing);
 			if (targetHandler != null) {
-				ItemStack stack = output.extractInternal(0, 64, true);
-				if (!stack.isEmpty()) {
-					ItemStack remainder = ItemHandlerHelper.insertItem(targetHandler, stack, false);
-					int count = stack.getCount() - remainder.getCount();
-					if (count != 0) {
-						output.extractInternal(0, count, false);
-						if (tile instanceof TileConveyor) {
-							TileConveyor conveyor = (TileConveyor) tile;
-							if (!conveyor.isUpdatedInTick()) {
-								conveyor.skip = true;
-							}
-						}
+				boolean transfered = false;
+				for (int i = 0; i < output.getSlots(); i++) {
+					ItemStack stack = output.getStackInSlot(i);
+					if (!stack.isEmpty()) {
+						ItemHandlerUtils.transfer(output, targetHandler, 64);
+						transfered = true;
+					}
+				}
+				if (transfered && tile instanceof TileConveyor) {
+					TileConveyor conveyor = (TileConveyor) tile;
+					if (!conveyor.isUpdatedInTick()) {
+						conveyor.skip = true;
 					}
 				}
 			}
-			tile.markDirty();
 			return ItemHandlerUtils.isEmpty(output);
 		}
 		return false;
 	}
 
 	public void processItem() {
-		ItemStack ingredient = input.extractInternal(0, 1, true);
+		ItemStack ingredient = input.getStackInSlot(0).copy();
 		IClimate climate = ClimateAPI.calculator.getClimate(world, pos);
 		ItemStack product = SmeltingHelper.onSmelting(ingredient, climate);
 		if (!product.isEmpty()) {
-			ItemStack remainder = output.insertInternal(0, product, true);
-			if (remainder.isEmpty()) {
-				this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.25f, 0.85f);
-				input.extractInternal(0, 1, false);
-				output.insertInternal(0, product, false);
-			} else {
-				this.thruItem();
-			}
+			ItemStack outputStack = output.getStackInSlot(0);
+			if (!outputStack.isEmpty() && product.isItemEqual(outputStack)) return;
+			ingredient.shrink(1);
+			if (ingredient.isEmpty()) ingredient = ItemStack.EMPTY;
+			input.setStackInSlot(0, ingredient);
+			product.grow(outputStack.getCount());
+			output.setStackInSlot(0, product);
+			this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.25f, 0.85f);
 		} else {
 			this.thruItem();
 		}
 	}
 
 	public void thruItem() {
-		ItemStack stack = input.extractInternal(0, 64, true);
-		ItemStack remainder = output.insertInternal(0, stack, true);
-		int count = stack.getCount() - remainder.getCount();
-		if (count != 0) {
-			stack = stack.copy();
-			stack.setCount(count);
-			input.extractInternal(0, count, false);
-			output.insertInternal(0, stack, false);
-		}
+		output.setStackInSlot(0, input.getStackInSlot(0));
+		input.setStackInSlot(0, ItemStack.EMPTY);
 	}
 
 	public void playSound(SoundEvent sound, float volume, float pitch) {
@@ -256,7 +250,7 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 				ItemStack insert = item.copy();
 				if (!item.isEmpty()) {
 					ItemStack remainder = this.input.insertItem(0, insert, false);
-					item.splitStack(item.getCount() - remainder.getCount());
+					item.shrink(item.getCount() - remainder.getCount());
 					if (item.isEmpty()) {
 						drop.setDead();
 					}

@@ -1,7 +1,5 @@
 package skytheory.hap.tile;
 
-import java.util.function.Predicate;
-
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.IClimate;
 import net.minecraft.block.BlockHorizontal;
@@ -35,13 +33,11 @@ import skytheory.lib.util.ItemHandlerUtils;
 public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTileDirectional, ITileInventory {
 
 	public static String KEY_PROCESS = "CoolTime";
-	public static String KEY_RECIPE = "Recipe";
 	public static int PROCESS_SPEED = 40;
 
 	private int progress;
 	private ItemHandler input;
 	private ItemHandler output;
-	private ItemStack recipe = ItemStack.EMPTY;
 
 	@Override
 	public ICapabilityProvider createInventoryProvider() {
@@ -50,7 +46,7 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 			public int getSlotLimit(int slot) {
 				ItemStack result = output.getStackInSlot(0);
 				if (result.isEmpty()) return 64;
-				return result.getMaxStackSize() - result.getCount();
+				return 64 - result.getCount();
 			}
 		};
 		this.output = new ItemHandler(1);
@@ -58,10 +54,6 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 		this.input.addListener(this);
 		this.output.addListener(this);
 
-		Predicate<ItemStack> condition1 = stack -> this.recipe.isEmpty();
-		Predicate<ItemStack> condition2 = stack -> ItemHandlerHelper.canItemStacksStack(recipe, stack);
-
-		this.input.setCanInsert((slot, stack) -> condition1.or(condition2).test(stack));
 		this.input.setCanExtract(false);
 		this.output.setCanInsert(false);
 
@@ -89,43 +81,36 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 			// inputが空ならばカウントをリセット
 			this.progress = 0;
 		}
-		if (!ItemHandlerUtils.isEmpty(output)) {
+		if (ItemHandlerUtils.isEmpty(input) && !ItemHandlerUtils.isEmpty(output)) {
 			IClimate climate = ClimateAPI.calculator.getClimate(world, pos);
-			if (!ItemHandlerUtils.isEmpty(output)) {
-				// 完成品スロットにあるものが加工可能なら差し戻し
-				ItemStack ingredient = output.extractItem(0, 1, true);
-				if (SmeltingHelper.canSmelting(ingredient, climate)) {
-					ItemStack back = output.extractItem(0, 64, false);
-					input.insertItem(0, back, false);
-				}
+			// 完成品スロットにあるものが加工可能なら差し戻し
+			ItemStack ingredient = output.getStackInSlot(0);
+			if (SmeltingHelper.canSmelting(ingredient, climate)) {
+				input.setStackInSlot(0, output.getStackInSlot(0));
+				output.setStackInSlot(0, ItemStack.EMPTY);
 			}
-		}
-		if (!this.recipe.isEmpty() && ItemHandlerUtils.isEmpty(input, output)) {
-			// インベントリが空になれば、レシピをリセットする
-			this.recipe = ItemStack.EMPTY;
-			this.markDirty();
 		}
 	}
 
 	public void processItem() {
-		ItemStack ingredient = input.extractInternal(0, 1, true);
+		ItemStack ingredient = input.getStackInSlot(0).copy();
 		IClimate climate = ClimateAPI.calculator.getClimate(world, pos);
 		ItemStack product = SmeltingHelper.onSmelting(ingredient, climate);
-		this.recipe = ingredient;
 		if (!product.isEmpty()) {
-			ItemStack remainder = output.insertInternal(0, product, true);
-			if (remainder.isEmpty()) {
-				this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.25f, 0.85f);
-				input.extractInternal(0, 1, false);
-				output.insertInternal(0, product, false);
+			ItemStack outputStack = output.getStackInSlot(0).copy();
+			if (outputStack.isEmpty() || product.isItemEqual(outputStack)) {
+				if (product.getCount() + outputStack.getCount() <= product.getMaxStackSize()) {
+					ingredient.shrink(1);
+					if (ingredient.isEmpty()) {
+						input.setStackInSlot(0, ItemStack.EMPTY);
+					} else {
+						input.setStackInSlot(0, ingredient);
+					}
+					product.grow(outputStack.getCount());
+					output.setStackInSlot(0, product);
+					this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.25f, 0.85f);
+				}
 			}
-		} else {
-			ItemStack stack = input.extractInternal(0, 64, true);
-			ItemStack remainder = output.insertInternal(0, stack, true);
-			int count = stack.getCount() - remainder.getCount();
-			stack.setCount(count);
-			input.extractInternal(0, count, false);
-			output.insertInternal(0, stack, false);
 		}
 	}
 
@@ -178,20 +163,12 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 			int count = MathHelper.clamp(compound.getInteger(KEY_PROCESS), 0, PROCESS_SPEED);
 			this.progress = count;
 		}
-		if (compound.hasKey(KEY_RECIPE, Constants.NBT.TAG_COMPOUND)) {
-			this.recipe = new ItemStack(compound.getCompoundTag(KEY_RECIPE));
-		}
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setInteger(KEY_PROCESS, this.progress);
-		if (!this.recipe.isEmpty()) {
-			NBTTagCompound itemtag = new NBTTagCompound();
-			recipe.writeToNBT(itemtag);
-			compound.setTag(KEY_RECIPE, itemtag);
-		}
 		return compound;
 	}
 

@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import skytheory.hap.gui.GuiCokeOven;
 import skytheory.hap.gui.GuiReactor;
 import skytheory.hap.init.ItemsHaP;
+import skytheory.hap.recipe.CokeOvenRecipe;
 import skytheory.hap.recipe.CokeOvenRecipes;
 
 @JEIPlugin
@@ -27,6 +28,7 @@ public class JeiPlugin implements IModPlugin {
 		registry.addRecipes(CokeOvenRecipes.getRecipes(), UID_COKEOVEN);
 		registry.addRecipeCatalyst(new ItemStack(ItemsHaP.coke_oven), UID_COKEOVEN);
 		registry.addRecipeClickArea(GuiCokeOven.class, GuiCokeOven.BAR_X, GuiCokeOven.BAR_Y, 32, 3, UID_COKEOVEN);
+		registry.handleRecipes(CokeOvenRecipe.class	, CokeOvenRecipeWrapper::new, UID_COKEOVEN);
 	}
 
 	@Override

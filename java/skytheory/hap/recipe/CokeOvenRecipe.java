@@ -1,19 +1,13 @@
 package skytheory.hap.recipe;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.ingredients.VanillaTypes;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import skytheory.lib.util.ItemHandlerUtils;
 
-public class CokeOvenRecipe implements IRecipeWrapper {
+public class CokeOvenRecipe {
 
 	public ItemStack ingredient;
 	public ItemStack result;
@@ -89,18 +83,4 @@ public class CokeOvenRecipe implements IRecipeWrapper {
 		return true;
 	}
 
-	// JEI
-
-	@Override
-	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInputs(VanillaTypes.ITEM, Collections.singletonList(this.ingredient));
-		ingredients.setOutputs(VanillaTypes.ITEM, Arrays.asList(this.result, this.secondary));
-	}
-
-	@Override
-	public void drawInfo(Minecraft mc, int wid, int hei, int mouseX, int mouseY) {
-		if (!secondary.isEmpty()) {
-			mc.fontRenderer.drawString("20-100% ", 108, 2, 0x0099FF, false);
-		}
-	}
 }

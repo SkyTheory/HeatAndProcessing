@@ -9,9 +9,8 @@ import mezz.jei.api.recipe.IRecipeCategory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import skytheory.hap.HeatAndProcessing;
-import skytheory.hap.recipe.CokeOvenRecipe;
 
-public class CokeOvenRecipeCategory implements IRecipeCategory<CokeOvenRecipe> {
+public class CokeOvenRecipeCategory implements IRecipeCategory<CokeOvenRecipeWrapper> {
 
 	private final IDrawableStatic background;
 	public static final ResourceLocation TEXTURE_JEI_COKEOVEN = new ResourceLocation(HeatAndProcessing.MOD_ID, "textures/gui/jei_cokeoven.png");
@@ -41,15 +40,15 @@ public class CokeOvenRecipeCategory implements IRecipeCategory<CokeOvenRecipe> {
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, CokeOvenRecipe recipeWrapper, IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, CokeOvenRecipeWrapper recipeWrapper, IIngredients ingredients) {
 		recipeLayout.getItemStacks().init(0, true, 43, 11);
-		recipeLayout.getItemStacks().set(0, recipeWrapper.ingredient);
+		recipeLayout.getItemStacks().set(0, recipeWrapper.recipe.ingredient);
 
 		recipeLayout.getItemStacks().init(1, false, 95, 11);
-		recipeLayout.getItemStacks().set(1, recipeWrapper.result);
+		recipeLayout.getItemStacks().set(1, recipeWrapper.recipe.result);
 
 		recipeLayout.getItemStacks().init(2, false, 115, 11);
-		recipeLayout.getItemStacks().set(2, recipeWrapper.secondary);
+		recipeLayout.getItemStacks().set(2, recipeWrapper.recipe.secondary);
 	}
 
 }
