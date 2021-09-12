@@ -1,5 +1,6 @@
 package skytheory.hap.init;
 
+import skytheory.hap.tile.TileCokeOven;
 import skytheory.hap.tile.TileCompactFreezer;
 import skytheory.hap.tile.TileCompactHeater;
 import skytheory.hap.tile.TileConveyor;
@@ -18,6 +19,7 @@ import skytheory.hap.tile.TileWaterCollector;
 
 public class TileEntitiesHaP {
 
+	public static Class<TileCokeOven> coke_oven = TileCokeOven.class;
 	public static Class<TileConveyor> conveyor = TileConveyor.class;
 	public static Class<TileSmeltingPlate> smelting_plate = TileSmeltingPlate.class;
 	public static Class<TileWaterCollector> water_collector = TileWaterCollector.class;

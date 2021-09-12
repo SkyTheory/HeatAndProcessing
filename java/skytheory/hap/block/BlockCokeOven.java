@@ -1,7 +1,11 @@
 package skytheory.hap.block;
 
 import java.util.List;
+import java.util.Random;
 
+import javax.annotation.Nullable;
+
+import defeatedcrow.hac.core.ClimateCore;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -12,6 +16,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -21,11 +26,18 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import skytheory.hap.tile.ITileInteract;
 import skytheory.hap.tile.TileCokeOven;
+import skytheory.hap.util.ConstantsHaP;
 import skytheory.lib.block.IWrenchBlock;
 import skytheory.lib.plugin.waila.IWailaTipBlock;
 import skytheory.lib.util.FacingHelper;
@@ -35,7 +47,7 @@ public class BlockCokeOven extends BlockContainer implements IWrenchBlock, IWail
 
 	public static final IProperty<EnumFacing> FACING = BlockHorizontal.FACING;
 
-	protected BlockCokeOven() {
+	public BlockCokeOven() {
 		super(Material.IRON);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
@@ -53,6 +65,41 @@ public class BlockCokeOven extends BlockContainer implements IWrenchBlock, IWail
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if (tile instanceof TileCokeOven) {
+			int state = ((TileCokeOven) tile).state;
+			if (state > 0) {
+				EnumFacing facing = stateIn.getValue(FACING);
+				double xBase = (double)pos.getX() + 0.5d;
+				double yBase = (double)pos.getY() + 0.75d;
+				double zBase = (double)pos.getZ() + 0.5d;
+				double xSpeed = rand.nextDouble() * 0.05d - 0.025d;
+				double ySpeed = rand.nextDouble() * 0.05d;
+				double zSpeed = rand.nextDouble() * 0.05d - 0.025d;
+				if (facing == EnumFacing.NORTH) {
+					xBase -= 0.46875d;
+					zBase += 0.21875d;
+				} else if (facing == EnumFacing.EAST) {
+					xBase -= 0.21875d;
+					zBase -= 0.46875d;
+				} else if (facing == EnumFacing.SOUTH) {
+					xBase += 0.46875d;
+					zBase -= 0.21875d;
+				} else if (facing == EnumFacing.WEST) {
+					xBase += 0.21875d;
+					zBase += 0.46875d;
+				}
+				worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xBase, yBase, zBase, xSpeed, ySpeed, zSpeed);
+				xSpeed = rand.nextDouble() * 0.05d - 0.025d;
+				ySpeed = rand.nextDouble() * 0.05d + 0.025d;
+				zSpeed = rand.nextDouble() * 0.05d - 0.025d;
+				worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, xBase, yBase, zBase, xSpeed, ySpeed, zSpeed);
+			}
+		}
 	}
 
 	@Override
@@ -93,6 +140,17 @@ public class BlockCokeOven extends BlockContainer implements IWrenchBlock, IWail
 	}
 
 	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		ItemStack itemStack = new ItemStack(Item.getItemFromBlock(this));
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile != null) {
+			NBTTagCompound nbt = tile.writeToNBT(new NBTTagCompound());
+			itemStack.getOrCreateSubCompound("BlockEntityTag").merge(nbt);
+		}
+		drops.add(itemStack);
+	}
+
+	@Override
 	public void getWailaTips(ItemStack stack, List<String> tips, IWailaDataAccessor accessor) {
 		IBlockState state = accessor.getBlockState();
 		tips.add(I18n.format(STLibConstants.TIP_FACING, state.getValue(FACING).getName()));
@@ -120,19 +178,6 @@ public class BlockCokeOven extends BlockContainer implements IWrenchBlock, IWail
 		world.setBlockState(pos, state.withProperty(FACING, FacingHelper.rotateY(facing)));
 	}
 
-
-	@Override
-	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
-		ItemStack itemStack = new ItemStack(Item.getItemFromBlock(this));
-		TileEntity tile = worldIn.getTileEntity(pos);
-		if (tile instanceof TileCokeOven) {
-			TileCokeOven cokeoven = (TileCokeOven) tile;
-			NBTTagCompound nbt = cokeoven.writeToNBT(new NBTTagCompound());
-			itemStack.getOrCreateSubCompound("BlockEntityTag").merge(nbt);
-		}
-        spawnAsEntity(worldIn, pos, itemStack);
-	}
-
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -143,4 +188,17 @@ public class BlockCokeOven extends BlockContainer implements IWrenchBlock, IWail
 		return false;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		if (ClimateCore.proxy.isShiftKeyDown()) {
+			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Requirement ===");
+			tooltip.add(String.format("HeatTier: " + TextFormatting.GOLD.toString() + "OVEN+"));
+			tooltip.add(String.format("Humidity: " + TextFormatting.DARK_RED.toString() + "DRY"));
+			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Tips ===");
+			tooltip.add(I18n.format(ConstantsHaP.TIP_COKE_OVEN));
+		} else {
+			tooltip.add(TextFormatting.ITALIC.toString() + "=== Lshift key: expand tooltip ===");
+		}
+	}
 }

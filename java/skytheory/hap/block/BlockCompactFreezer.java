@@ -36,10 +36,10 @@ public class BlockCompactFreezer extends BlockHeatController {
 			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "4: 64.0+ Torque/s"));
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD
 					.toString() + "=== Output ===");
-			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "1 HeatTier: " + TextFormatting.AQUA.toString()) + "COLD");
-			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "2 HeatTier: " + TextFormatting.AQUA.toString()) + "FROSTBITE");
-			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "3 HeatTier: " + TextFormatting.AQUA.toString()) + "CRYOGENIC");
-			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "4 HeatTier: " + TextFormatting.AQUA.toString()) + "ABSOLUTE");
+			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "1 HeatTier: " + TextFormatting.AQUA.toString() + "COLD"));
+			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "2 HeatTier: " + TextFormatting.AQUA.toString() + "FROSTBITE"));
+			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "3 HeatTier: " + TextFormatting.AQUA.toString() + "CRYOGENIC"));
+			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "4 HeatTier: " + TextFormatting.AQUA.toString() + "ABSOLUTE"));
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Tips ===");
 			tooltip.add(I18n.format(ConstantsHaP.TIP_FREEZER));
 		} else {

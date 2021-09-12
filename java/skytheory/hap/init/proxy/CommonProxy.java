@@ -18,6 +18,7 @@ import skytheory.hap.config.HaPConfig;
 import skytheory.hap.init.BlocksHaP;
 import skytheory.hap.init.GuiHandler;
 import skytheory.hap.init.TileEntitiesHaP;
+import skytheory.hap.recipe.CokeOvenRecipes;
 import skytheory.hap.recipe.ReactorRecipes;
 import skytheory.hap.util.WrenchRegister;
 import skytheory.lib.SkyTheoryLib;
@@ -51,11 +52,12 @@ public class CommonProxy {
 		OreDictionary.registerOre("treeLeaves", new ItemStack(FoodInit.leavesOlive, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(FoodInit.leavesTea, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(FoodInit.leavesWalnut, 1, OreDictionary.WILDCARD_VALUE));
+		ClimateAPI.registerBlock.registerHeatBlock(BlocksHaP.heat_block, 32767, DCHeatTier.KILN);
+		ClimateAPI.registerBlock.registerHeatBlock(BlocksHaP.pumpkin_lantern, 32767, DCHeatTier.WARM);
+		CokeOvenRecipes.register();
 	}
 
 	public void postInit(FMLPostInitializationEvent event) {
-		ClimateAPI.registerBlock.registerHeatBlock(BlocksHaP.heat_block, 32767, DCHeatTier.KILN);
-		ClimateAPI.registerBlock.registerHeatBlock(BlocksHaP.pumpkin_lantern, 32767, DCHeatTier.WARM);
 		ReactorRecipes.register();
 	}
 }

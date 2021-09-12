@@ -138,9 +138,8 @@ public class BlockReactorStorage extends BlockContainer implements IWrenchBlock,
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ItemStack itemStack = new ItemStack(Item.getItemFromBlock(this));
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileReactorStorage) {
-			TileReactorStorage storage = (TileReactorStorage) tile;
-			NBTTagCompound nbt = storage.writeToNBT(new NBTTagCompound());
+		if (tile != null) {
+			NBTTagCompound nbt = tile.writeToNBT(new NBTTagCompound());
 			itemStack.getOrCreateSubCompound("BlockEntityTag").merge(nbt);
 		}
 		drops.add(itemStack);

@@ -4,6 +4,7 @@
 itemGroup.hap=HeatAndProcessing
 #
 # Blocks
+tile.coke_oven.name=石炭乾留炉
 tile.conveyor.name=高速コンベア
 tile.heat_block.name=熱源ブロック
 tile.pumpkin_lantern.name=ミニランタン
@@ -35,9 +36,11 @@ item.coating_molybdenum.name=モリブデン潤滑剤
 # Tips
 hap.tip.config=HeatAndProcessing Config
 hap.tip.heat=HeatTier : %s
-hap.tip.climatecontroller.cool=正面1ブロックを冷却します。
-hap.tip.climatecontroller.heat=正面1ブロックを加熱します。
-hap.tip.climatecontroller.wet=正面1ブロックを加湿します。
+hap.tip.coke_oven=高温の環境では加工速度が上がり、二次生産物のチャンスが減ります。
+hap.tip.water_collector=葉ブロックの下に設置すると、ゆっくりと水が溜まります。
+hap.tip.climate_controller.cool=正面1ブロックを冷却します。
+hap.tip.climate_controller.heat=正面1ブロックを加熱します。
+hap.tip.climate_controller.wet=正面1ブロックを加湿します。
 hap.tip.humidity=Humidity : %s
 hap.tip.input=Torque Input
 hap.tip.output=Torque Output
@@ -63,3 +66,6 @@ hap.config.asm=アクセサリの所持判定を書き換える
 hap.config.extend=アクセサリの判定範囲を拡張する
 hap.config.count=アクセサリの最大適用個数
 hap.config.recipe=追加リアクターレシピ
+#
+# JEI
+hap.plugin.jei.cokeoven=石炭乾留炉

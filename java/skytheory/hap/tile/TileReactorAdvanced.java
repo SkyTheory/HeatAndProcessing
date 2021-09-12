@@ -365,6 +365,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 			// レシピに変更があった場合は進捗をリセット
 			this.progress = 0.0f;
 		}
+		TileSync.sendToClient(this, DataSyncHandler.SYNC_DATA_CAPABILITY);
 	}
 
 	/*
@@ -555,7 +556,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		if (compound.hasKey(KEY_HEAT_TIER, Constants.NBT.TAG_INT)) {
 			this.heatTier = DCHeatTier.getTypeByID(compound.getInteger(KEY_HEAT_TIER));
 		}
-		if (this.hasWorld() && !this.world.isRemote) {
+		if (!this.world.isRemote) {
 			this.skipProcessItem = false;
 			this.skipRecipe = false;
 		}
@@ -609,7 +610,6 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	@Override
 	public void getWailaTips(ItemStack stack, List<String> tips, IWailaDataAccessor accessor) {
 		super.getWailaTips(stack, tips, accessor);
-		TileSync.request(this, DataSyncHandler.SYNC_DATA_CAPABILITY, FacingUtils.SET_SINGLE_NULL);
 		float torque = this.getTorque();
 		if (torque >= TORQUE_REQUIRED) {
 			int percentage = MathHelper.floor((progress / this.getTorqueProcess()) * 100.0f);

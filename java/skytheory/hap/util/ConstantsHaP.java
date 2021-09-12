@@ -8,9 +8,11 @@ public class ConstantsHaP {
 	public static final String TIP_INPUT = "hap.tip.input";
 	public static final String TIP_OUTPUT = "hap.tip.output";
 
-	public static final String TIP_HEATER = "hap.tip.climatecontroller.heat";
-	public static final String TIP_FREEZER = "hap.tip.climatecontroller.cool";
-	public static final String TIP_MIST = "hap.tip.climatecontroller.wet";
+	public static final String TIP_COKE_OVEN = "hap.tip.coke_oven";
+	public static final String TIP_WATER_COLLECTOR = "hap.tip.water_collector";
+	public static final String TIP_HEATER = "hap.tip.climate_controller.heat";
+	public static final String TIP_FREEZER = "hap.tip.climate_controller.cool";
+	public static final String TIP_MIST = "hap.tip.climate_controller.wet";
 
 	public static final String TIP_REACTOR = "hap.tip.reactor.advanced";
 	public static final String TIP_REACTOR_FLUIDPORT = "hap.tip.reactor_fluidport";

@@ -20,6 +20,8 @@ public class WrenchRegister {
 
 		WrenchRegistry.register(MainInit.bellow, WrenchTypesHaP.DC_ALL_FACINGS);
 		WrenchRegistry.register(MainInit.geyser, WrenchTypesHaP.DC_ALL_FACINGS);
+		WrenchRegistry.register(MainInit.lampCarbide, WrenchTypesHaP.DC_ALL_FACINGS);
+		WrenchRegistry.register(MainInit.lampGas, WrenchTypesHaP.DC_ALL_FACINGS);
 		WrenchRegistry.register(MachineInit.boilerTurbine, WrenchTypesHaP.DC_ALL_FACINGS);
 		WrenchRegistry.register(MachineInit.dieselEngine, WrenchTypesHaP.DC_ALL_FACINGS);
 		WrenchRegistry.register(MachineInit.fan, WrenchTypesHaP.DC_ALL_FACINGS);

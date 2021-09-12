@@ -14,6 +14,7 @@ public class ItemsHaP {
 	public static Item wrench = new ItemWrench();
 	public static Item coating_molybdenum = new ItemCoatingTool(Enchantments.SWEEPING, Enchantments.FROST_WALKER);
 	// Block
+	public static Item coke_oven = new ItemBlock(BlocksHaP.coke_oven);
 	public static Item conveyor = new ItemBlock(BlocksHaP.conveyor);
 	public static Item heat_block = new ItemBlock(BlocksHaP.heat_block);
 	public static Item pumpkin_lantern = new ItemBlock(BlocksHaP.pumpkin_lantern);

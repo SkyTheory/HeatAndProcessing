@@ -1,0 +1,27 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"XXX",
+		"YZY",
+		"YYY"
+	],
+	"key": {
+		"X": {
+			"type": "forge:ore_dict",
+			"ore": "ingotNickel"
+		},
+		"Y": {
+			"type": "forge:ore_dict",
+			"ore": "ingotIron"
+		},
+		"Z": {
+			"item": "dcs_climate:dcs_device_chamber",
+			"data": 0
+		}
+	},
+	"result": {
+		"item": "hap:coke_oven",
+		"count": 1,
+		"data": 0
+	}
+}

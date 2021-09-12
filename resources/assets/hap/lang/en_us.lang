@@ -4,6 +4,7 @@
 itemGroup.hap=HeatAndProcessing
 #
 # Blocks
+tile.coke_oven.name=Coke Oven
 tile.conveyor.name=Fast Conveyor
 tile.heat_block.name=Heat Block
 tile.pumpkin_lantern.name=Mini Lantern
@@ -35,9 +36,11 @@ item.coating_molybdenum.name=Molybdenum Lubrication Tool
 # Tips
 hap.tip.config=HeatAndProcessing Config
 hap.tip.heat=HeatTier : %s
-hap.tip.climatecontroller.cool=Affects only one block on the front.
-hap.tip.climatecontroller.heat=Affects only one block on the front.
-hap.tip.climatecontroller.wet=Affects only one block on the front.
+hap.tip.coke_oven=Higher HeatTier to increase speed and decrease secondary output chance.
+hap.tip.water_collector=Place it under the leaves to slowly collect water.
+hap.tip.climate_controller.cool=Affects only one block on the front.
+hap.tip.climate_controller.heat=Affects only one block on the front.
+hap.tip.climate_controller.wet=Affects only one block on the front.
 hap.tip.humidity=Humidity : %s
 hap.tip.input=Torque Input
 hap.tip.output=Torque Output
@@ -63,3 +66,6 @@ hap.config.asm=Enable Charm Options
 hap.config.extend=Extend Charm Search
 hap.config.count=Max Charm Count
 hap.config.recipe=Additional Reactor Recipes
+#
+# JEI
+hap.plugin.jei.cokeoven=Coke Oven

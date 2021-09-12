@@ -4,10 +4,12 @@ import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraftforge.items.CapabilityItemHandler;
 import skytheory.hap.tile.TileCokeOven;
 import skytheory.lib.container.ContainerPlayerInventory;
 import skytheory.lib.container.SlotHelper;
 import skytheory.lib.container.SlotItemHandler;
+import skytheory.lib.network.tile.TileSync;
 
 public class ContainerCokeOven extends ContainerPlayerInventory {
 
@@ -27,6 +29,13 @@ public class ContainerCokeOven extends ContainerPlayerInventory {
 		this.tile = tile;
 		this.inputSlots = this.addSlotFromInventory(tile.input, INPUT_X, INPUT_Y, 9);
 		this.outputSlots = this.addSlotFromInventory(tile.output, OUTPUT_X, OUTPUT_Y, 1);
+	}
+
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
+		if (!tile.getWorld().isRemote) {
+			TileSync.sendToClient(tile, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
+		}
 	}
 
 	@Override

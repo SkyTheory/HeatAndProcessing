@@ -1,6 +1,7 @@
 package skytheory.hap.init;
 
 import net.minecraft.block.Block;
+import skytheory.hap.block.BlockCokeOven;
 import skytheory.hap.block.BlockCompactFreezer;
 import skytheory.hap.block.BlockCompactHeater;
 import skytheory.hap.block.BlockConveyor;
@@ -21,6 +22,7 @@ import skytheory.hap.block.BlockWaterCollector;
 
 public class BlocksHaP {
 
+	public static Block coke_oven = new BlockCokeOven();
 	public static Block conveyor = new BlockConveyor();
 	public static Block heat_block = new BlockHeatSource();
 	public static Block pumpkin_lantern = new BlockPumpkinLantern();

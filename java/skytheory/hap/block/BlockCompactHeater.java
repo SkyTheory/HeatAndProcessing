@@ -36,10 +36,10 @@ public class BlockCompactHeater extends BlockHeatController {
 			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "4: 64.0+ Torque/s"));
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD
 					.toString() + "=== Output ===");
-			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "1 HeatTier: " + TextFormatting.GOLD.toString()) + "OVEN");
-			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "2 HeatTier: " + TextFormatting.GOLD.toString()) + "KILN");
-			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "3 HeatTier: " + TextFormatting.GOLD.toString()) + "SMELTING");
-			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "4 HeatTier: " + TextFormatting.GOLD.toString()) + "UHT");
+			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "1 HeatTier: " + TextFormatting.GOLD.toString() + "OVEN"));
+			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "2 HeatTier: " + TextFormatting.GOLD.toString() + "KILN"));
+			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "3 HeatTier: " + TextFormatting.GOLD.toString() + "SMELTING"));
+			tooltip.add(String.format(DCName.STAGE.getLocalizedName() + "4 HeatTier: " + TextFormatting.GOLD.toString() + "UHT"));
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Tips ===");
 			tooltip.add(I18n.format(ConstantsHaP.TIP_HEATER));
 		} else {

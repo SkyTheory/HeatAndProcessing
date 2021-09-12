@@ -1,0 +1,22 @@
+{
+	"variants": {
+		"facing=north": {
+			"model": "hap:coke_oven"
+		},
+		"facing=east": {
+			"model": "hap:coke_oven",
+			"y": 90,
+			"uvlock": false
+		},
+		"facing=south": {
+			"model": "hap:coke_oven",
+			"y": 180,
+			"uvlock": false
+		},
+		"facing=west": {
+			"model": "hap:coke_oven",
+			"y": 270,
+			"uvlock": false
+		}
+	}
+}
