@@ -1,0 +1,35 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"S S",
+		"CED",
+		" B "
+	],
+	"key": {
+		"S": {
+			"type": "forge:ore_dict",
+			"ore": "string"
+		},
+		"C": {
+			"type": "forge:ore_dict",
+			"ore": "extractRed"
+		},
+		"D": {
+			"type": "forge:ore_dict",
+			"ore": "extractGreen"
+		},
+		"E": {
+			"item": "minecraft:ender_eye",
+			"data": 0
+		},
+		"B": {
+			"item": "minecraft:experience_bottle",
+			"data": 0
+		}
+	},
+	"result": {
+		"item": "hap:amulet_rg",
+		"count": 1,
+		"data": 0
+	}
+}

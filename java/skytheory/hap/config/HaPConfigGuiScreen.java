@@ -12,7 +12,10 @@ public class HaPConfigGuiScreen extends GuiConfig {
 
 	@Override
 	public void onGuiClosed() {
-		if (HaPConfig.CONFIG.hasChanged()) HaPConfig.save();
+		if (HaPConfig.CONFIG.hasChanged()) {
+			HaPConfig.save();
+			HaPConfig.read();
+		}
 		super.onGuiClosed();
 	}
 }

@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import skytheory.hap.creativetab.CreativeTabsHaP;
 import skytheory.hap.event.CapabilityEvent;
+import skytheory.hap.event.CharmEvent;
 import skytheory.hap.event.ClimateHUDEvent;
 import skytheory.hap.event.TextureEvent;
 import skytheory.hap.event.WrenchEvent;
@@ -27,7 +28,7 @@ import skytheory.lib.init.ResourceRegister;
 		name=HeatAndProcessing.MOD_NAME,
 		version=HeatAndProcessing.VERSION,
 		guiFactory = "skytheory.hap.config.HaPConfigGuiFactory",
-		dependencies = "required-after:dcs_climate;required-after:stlib@[1.12.2-1.1.0,)"
+		dependencies = "required-after:dcs_climate;required-after:stlib@[1.12.2-1.2.0,)"
 	)
 
 public class HeatAndProcessing {
@@ -35,7 +36,7 @@ public class HeatAndProcessing {
 	public static final String MOD_ID = "hap";
 	public static final String MOD_NAME = "HeatAndProcessing";
 	public static final String MC_VERSION = "1.12.2";
-	public static final String MOD_VERSION = "1.1.1";
+	public static final String MOD_VERSION = "1.2.0";
 	public static final String VERSION = MC_VERSION + "-" + MOD_VERSION;
 
 	@Mod.Instance
@@ -51,6 +52,7 @@ public class HeatAndProcessing {
 	public void construct(FMLConstructionEvent event) {
 		MinecraftForge.EVENT_BUS.register(this);
 		MinecraftForge.EVENT_BUS.register(CapabilityEvent.class);
+		MinecraftForge.EVENT_BUS.register(CharmEvent.class);
 		MinecraftForge.EVENT_BUS.register(ClimateHUDEvent.class);
 		MinecraftForge.EVENT_BUS.register(TextureEvent.class);
 		MinecraftForge.EVENT_BUS.register(WrenchEvent.class);

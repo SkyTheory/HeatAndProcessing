@@ -175,12 +175,15 @@ public class BlockCokeOven extends BlockContainer implements IWrenchBlock, IWail
 	public void onRightClickWithWrench(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side) {
 		IBlockState state = world.getBlockState(pos);
 		EnumFacing facing = state.getValue(FACING);
-		world.setBlockState(pos, state.withProperty(FACING, FacingHelper.rotateY(facing)));
+		if (player.isSneaking()) {
+			world.setBlockState(pos, state.withProperty(FACING, FacingHelper.invert(facing)));
+		} else {
+			world.setBlockState(pos, state.withProperty(FACING, FacingHelper.rotateY(facing)));
+		}
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile instanceof ITileInteract) {
 			return ((ITileInteract) tile).onRightClick(worldIn, pos, playerIn, hand, facing);

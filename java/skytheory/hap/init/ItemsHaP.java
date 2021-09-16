@@ -3,6 +3,11 @@ package skytheory.hap.init;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import skytheory.hap.item.ItemAmuletBR;
+import skytheory.hap.item.ItemAmuletGW;
+import skytheory.hap.item.ItemAmuletRG;
+import skytheory.hap.item.ItemAmuletUB;
+import skytheory.hap.item.ItemAmuletWU;
 import skytheory.hap.item.ItemCoatingTool;
 import skytheory.hap.item.ItemWrench;
 import skytheory.lib.item.ItemBlockHorizontal;
@@ -13,6 +18,13 @@ public class ItemsHaP {
 	// Item
 	public static Item wrench = new ItemWrench();
 	public static Item coating_molybdenum = new ItemCoatingTool(Enchantments.SWEEPING, Enchantments.FROST_WALKER);
+
+	public static Item amulet_wu = new ItemAmuletWU();
+	public static Item amulet_ub = new ItemAmuletUB();
+	public static Item amulet_br = new ItemAmuletBR();
+	public static Item amulet_rg = new ItemAmuletRG();
+	public static Item amulet_gw = new ItemAmuletGW();
+
 	// Block
 	public static Item coke_oven = new ItemBlock(BlocksHaP.coke_oven);
 	public static Item conveyor = new ItemBlock(BlocksHaP.conveyor);

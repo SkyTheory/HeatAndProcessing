@@ -5,6 +5,7 @@ import java.util.List;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHumidity;
 import defeatedcrow.hac.config.CoreConfigDC;
+import defeatedcrow.hac.main.block.plant.BlockHedge;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -50,6 +52,8 @@ public class TileWaterCollector extends TileEntity implements ITickable, ITileTa
 	public static final int CONDENSE = 10;
 	// 判定頻度
 	public static final int FREQUENCY = 20;
+	// 判定距離
+	public static final int RANGE = 3;
 
 	public FluidHandler handler;
 	public UpdateFrequency freq = new UpdateFrequency(FREQUENCY);
@@ -70,18 +74,34 @@ public class TileWaterCollector extends TileEntity implements ITickable, ITileTa
 				Block block = world.getBlockState(pos.up()).getBlock();
 				if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
 					this.handler.fill(new FluidStack(FluidRegistry.WATER, CAPACITY), true);
-				} else {
-					ItemStack above = new ItemStack(block);
-					if (!above.isEmpty()) {
-						if (OreDictionary.getOres("treeLeaves").stream().anyMatch(ore -> OreDictionary.itemMatches(ore, above, false))) {
-							if (ClimateAPI.calculator.getHumidity(world, pos, CoreConfigDC.ranges[1], false) == DCHumidity.WET) {
-								this.handler.fill(new FluidStack(FluidRegistry.WATER, CONDENSE), true);
-							}
+					return;
+				}
+				DCHumidity humidity = ClimateAPI.calculator.getHumidity(world, pos, CoreConfigDC.ranges[1], false);
+				if (humidity == DCHumidity.WET) {
+					BlockPos checkPos = this.getPos();
+					for (int i = 0; i < RANGE; i++) {
+						checkPos = checkPos.up();
+						Block checkBlock = world.getBlockState(checkPos).getBlock();
+						if (isLeaves(checkBlock)) {
+							this.handler.fill(new FluidStack(FluidRegistry.WATER, CONDENSE), true);
+							return;
 						}
 					}
 				}
 			}
 		}
+	}
+
+	public static boolean isLeaves(Block block) {
+		if (block instanceof BlockHedge) {
+			return true;
+		}
+		ItemStack stack = new ItemStack(block);
+		if (!stack.isEmpty()) {
+			NonNullList<ItemStack> oreLeaves = OreDictionary.getOres("treeLeaves");
+			return oreLeaves.stream().anyMatch(ore -> OreDictionary.itemMatches(ore, stack, false));
+		}
+		return false;
 	}
 
 	@Override

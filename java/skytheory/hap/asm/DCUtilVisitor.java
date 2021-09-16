@@ -45,7 +45,7 @@ public class DCUtilVisitor extends ClassVisitor implements Opcodes {
             mv.visitVarInsn(ALOAD, 1);
             mv.visitMethodInsn(INVOKESTATIC, TARGET_REPLACE, TARGET_METHOD, TARGET_DESC, false);
             mv.visitInsn(ARETURN);
-            mv.visitMaxs(1, 3);
+            mv.visitMaxs(0, 0);
             mv.visitEnd();
         }
 	}

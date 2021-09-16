@@ -3,7 +3,7 @@
   "modid": "hap",
   "name": "HeatAndProcessing",
   "description": "An addon for HeatAndClimate.",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "mcversion": "1.12.2",
   "url": "",
   "updateUrl": "",

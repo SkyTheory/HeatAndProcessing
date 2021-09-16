@@ -83,6 +83,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	public IItemHandler itemCatalyst;
 	public IItemHandler itemFilter;
 
+	public float prevProgress = 0.0f;
 	public float progress = 0.0f;
 	private DCHeatTier heatTier = DCHeatTier.NORMAL;
 
@@ -340,6 +341,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	}
 
 	public void updateProcessing() {
+		this.prevProgress = progress;
 		// レシピに変更がないかをチェック
 		if ((skipRecipe || this.validateRecipe()) && recipe != null) {
 			if (progress < this.getTorqueProcess() || skipProcessItem) {
@@ -365,7 +367,9 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 			// レシピに変更があった場合は進捗をリセット
 			this.progress = 0.0f;
 		}
-		TileSync.sendToClient(this, DataSyncHandler.SYNC_DATA_CAPABILITY);
+		if (prevProgress != progress) {
+			TileSync.sendToClient(this, DataSyncHandler.SYNC_DATA_CAPABILITY);
+		}
 	}
 
 	/*
@@ -556,10 +560,8 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		if (compound.hasKey(KEY_HEAT_TIER, Constants.NBT.TAG_INT)) {
 			this.heatTier = DCHeatTier.getTypeByID(compound.getInteger(KEY_HEAT_TIER));
 		}
-		if (!this.world.isRemote) {
-			this.skipProcessItem = false;
-			this.skipRecipe = false;
-		}
+		this.skipProcessItem = false;
+		this.skipRecipe = false;
 		this.markDirty();
 	}
 
