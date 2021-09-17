@@ -6,7 +6,7 @@ import java.util.Map;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
-import skytheory.hap.config.HaPConfig;
+import skytheory.hap.asm.config.HaPASMConfig;
 
 @MCVersion("1.12.2")
 public class LoadingPlugin implements IFMLLoadingPlugin {
@@ -34,8 +34,8 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			file = (File) data.get("mcLocation");
 		}
 		if (file != null) {
-			Configuration config = new Configuration(new File(file, "config/HeatAndProcessing.cfg"));
-			HaPConfig.init(config);
+			Configuration config = new Configuration(new File(file, "config/HeatAndProcessingASM.cfg"));
+			HaPASMConfig.init(config);
 		}
 	}
 

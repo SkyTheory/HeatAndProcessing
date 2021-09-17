@@ -1,5 +1,6 @@
 package skytheory.hap.init.proxy;
 
+import java.io.File;
 import java.util.Objects;
 
 import defeatedcrow.hac.api.climate.ClimateAPI;
@@ -8,6 +9,7 @@ import defeatedcrow.hac.api.energy.capability.TorqueCapabilityHandler;
 import defeatedcrow.hac.food.FoodInit;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -39,8 +41,10 @@ public class CommonProxy {
 			SkyTheoryLib.LOGGER.warn("Torque capability already registered.");
 		}
 		ResourceRegister.registerTiles(TileEntitiesHaP.class, HeatAndProcessing.MOD_ID);
-		HaPConfig.read();
 		NetworkRegistry.INSTANCE.registerGuiHandler(HeatAndProcessing.INSTANCE, GuiHandler.INSTANCE);
+		File directory = event.getModConfigurationDirectory();
+		Configuration config = new Configuration(new File(directory.getPath(), "HeatAndProcessing.cfg"));
+		HaPConfig.init(config);
 	}
 
 	public void init(FMLInitializationEvent event) {

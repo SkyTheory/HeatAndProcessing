@@ -5,7 +5,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 
 import net.minecraft.launchwrapper.IClassTransformer;
-import skytheory.hap.config.HaPConfig;
+import skytheory.hap.asm.config.HaPASMConfig;
 
 public class ClassTransformer implements IClassTransformer {
 
@@ -15,7 +15,7 @@ public class ClassTransformer implements IClassTransformer {
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
-		if (transformedName.equals(TARGET_DCUTIL) && HaPConfig.asm_charm) {
+		if (transformedName.equals(TARGET_DCUTIL) && HaPASMConfig.asm_charm) {
 			ClassReader reader = new ClassReader(basicClass);
 			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 			ClassVisitor visitor = new DCUtilVisitor(writer);
@@ -23,7 +23,7 @@ public class ClassTransformer implements IClassTransformer {
 			return writer.toByteArray();
 		}
 		if (transformedName.equals(TARGET_ENDERMAN) || transformedName.equals(TARGET_ENDERMAN_SRG)) {
-			if (HaPConfig.asm_enderman) {
+			if (HaPASMConfig.asm_enderman) {
 				ClassReader reader = new ClassReader(basicClass);
 				ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 				ClassVisitor visitor = new EndermanVisitor(name, writer);
