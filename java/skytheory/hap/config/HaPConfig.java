@@ -5,6 +5,7 @@ import java.util.List;
 
 import defeatedcrow.hac.config.CoreConfigDC;
 import defeatedcrow.hac.core.client.AdvancedHUDEvent;
+import net.minecraft.init.Bootstrap;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.IConfigElement;
@@ -65,7 +66,7 @@ public class HaPConfig {
 		hide_hud = CONFIG.getBoolean("AutoHideHUD", CATEGORY_HUD, true, DESC_HIDE_HUD, ConstantsHaP.CFG_HUD);
 		recipe_reactor = CONFIG.getBoolean("ReactorRecipe", CATEGORY_RECIPE, true, DESC_RECIPE_REACTOR, ConstantsHaP.CFG_RECIPE);
 
-		if (!hide_hud) AdvancedHUDEvent.enable = CoreConfigDC.enableAdvHUD;
+		if (!hide_hud && Bootstrap.isRegistered()) AdvancedHUDEvent.enable = CoreConfigDC.enableAdvHUD;
 	}
 
 	public static void save() {
