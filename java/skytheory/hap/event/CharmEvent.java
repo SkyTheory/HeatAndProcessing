@@ -35,6 +35,7 @@ import skytheory.hap.init.ItemsHaP;
 
 public class CharmEvent {
 
+	// WHITE_BLUE はConstantとEndermanHookの方
 	private static ItemStack BLUE_BLACK = new ItemStack(ItemsHaP.amulet_ub);
 	private static ItemStack BLACK_RED = new ItemStack(ItemsHaP.amulet_br);
 	private static ItemStack RED_GREEN = new ItemStack(ItemsHaP.amulet_rg);
@@ -117,23 +118,23 @@ public class CharmEvent {
 			if (player.getHeldItemMainhand().isEmpty()) {
 				World world = event.getWorld();
 				BlockPos pos = event.getPos();
+				IBlockState state = world.getBlockState(pos);
 				EnumFacing facing = event.getFace();
 				if (player.isSneaking()) facing = facing.getOpposite();
 				BlockPos target = pos.offset(facing);
 				IBlockState targetState = world.getBlockState(target);
-				if (world.isAirBlock(target) || targetState.getMobilityFlag() == EnumPushReaction.DESTROY) {
-					event.setCanceled(true);
-					if (world.isRemote) return;
-					if (event.getHand() == EnumHand.OFF_HAND) return;
-					if (!player.getPosition().equals(target) && !player.getPosition().up().equals(target)) {
-						IBlockState state = world.getBlockState(pos);
-						if (BlockPistonBase.canPush(state, world, pos, facing.getOpposite(), false, facing)) {
+				if (BlockPistonBase.canPush(state, world, pos, facing.getOpposite(), false, facing)) {
+					if (world.isAirBlock(target) || targetState.getMobilityFlag() == EnumPushReaction.DESTROY) {
+						event.setCanceled(true);
+						if (world.isRemote) return;
+						if (event.getHand() == EnumHand.OFF_HAND) return;
+						if (!player.getPosition().equals(target) && !player.getPosition().up().equals(target)) {
 							Block block = state.getBlock();
 							SoundType soundtype = block.getSoundType(state, world, pos, null);
 							world.playSound(null, pos, soundtype.getBreakSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 							world.setBlockState(target, state);
 							world.setBlockState(pos, Blocks.AIR.getDefaultState());
-							if (targetState.getMobilityFlag() == EnumPushReaction.DESTROY) {
+							if (targetState.getMobilityFlag() == EnumPushReaction.DESTROY && !player.isCreative()) {
 								targetState.getBlock().harvestBlock(world, player, target, targetState, null, ItemStack.EMPTY);
 							}
 						}
