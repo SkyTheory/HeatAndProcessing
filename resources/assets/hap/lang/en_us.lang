@@ -100,4 +100,4 @@ hap.config.count=Max Charm Count
 hap.config.recipe=Additional Reactor Recipes
 #
 # JEI
-hap.plugin.jei.cokeoven=Coke Oven
+hap.plugin.jei.coke_oven=Coke Oven

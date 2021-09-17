@@ -100,4 +100,4 @@ hap.config.count=アクセサリの最大適用個数
 hap.config.recipe=追加リアクターレシピ
 #
 # JEI
-hap.plugin.jei.cokeoven=石炭乾留炉
+hap.plugin.jei.coke_oven=石炭乾留炉
