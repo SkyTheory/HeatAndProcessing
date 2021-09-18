@@ -22,7 +22,6 @@ public class ColorPendant2Visitor extends ClassVisitor implements Opcodes {
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 		MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
 		if (name.equals(TARGET_METHOD) && desc.equals(TARGET_DESC)) {
-			System.out.println("found ya!");
 			MethodVisitor replace = new getLumberTargetListTransformer(visitor);
 			return replace;
 		}

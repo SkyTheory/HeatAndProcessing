@@ -11,7 +11,6 @@ import defeatedcrow.hac.magic.MagicInit;
 import defeatedcrow.hac.main.MainInit;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import skytheory.hap.config.HaPConfig;
 import skytheory.hap.init.ItemsHaP;
 import skytheory.lib.SkyTheoryLib;
 
@@ -111,15 +110,13 @@ public class ReactorRecipes {
 			.build();
 
 	public static void register() {
-		if (HaPConfig.recipe_reactor && RecipeAPI.isLoaded) {
-			register(coating_molybdenum);
-			register(alchemic_conversion);
-			register(activate_white);
-			register(activate_blue);
-			register(activate_black);
-			register(activate_red);
-			register(activate_green);
-		}
+		register(coating_molybdenum);
+		register(alchemic_conversion);
+		register(activate_white);
+		register(activate_blue);
+		register(activate_black);
+		register(activate_red);
+		register(activate_green);
 	}
 
 	public static void register(IReactorRecipe recipe) {

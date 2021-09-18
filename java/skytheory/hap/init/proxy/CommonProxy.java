@@ -6,6 +6,7 @@ import java.util.Objects;
 import defeatedcrow.hac.api.climate.ClimateAPI;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.energy.capability.TorqueCapabilityHandler;
+import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.food.FoodInit;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -21,7 +22,9 @@ import skytheory.hap.init.BlocksHaP;
 import skytheory.hap.init.GuiHandler;
 import skytheory.hap.init.TileEntitiesHaP;
 import skytheory.hap.recipe.CokeOvenRecipes;
+import skytheory.hap.recipe.CrusherRecipes;
 import skytheory.hap.recipe.ReactorRecipes;
+import skytheory.hap.recipe.StoneMillRecipes;
 import skytheory.hap.util.WrenchRegister;
 import skytheory.lib.SkyTheoryLib;
 import skytheory.lib.init.ResourceRegister;
@@ -62,6 +65,10 @@ public class CommonProxy {
 	}
 
 	public void postInit(FMLPostInitializationEvent event) {
-		ReactorRecipes.register();
+		if (RecipeAPI.isLoaded) {
+			if (HaPConfig.recipe_mill) StoneMillRecipes.register();
+			if (HaPConfig.recipe_crusher) CrusherRecipes.register();
+			if (HaPConfig.recipe_reactor) ReactorRecipes.register();
+		}
 	}
 }

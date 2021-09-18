@@ -36,7 +36,7 @@ public class HeatAndProcessing {
 	public static final String MOD_ID = "hap";
 	public static final String MOD_NAME = "HeatAndProcessing";
 	public static final String MC_VERSION = "1.12.2";
-	public static final String MOD_VERSION = "1.2.3a";
+	public static final String MOD_VERSION = "1.3.0";
 	public static final String VERSION = MC_VERSION + "-" + MOD_VERSION;
 
 	@Mod.Instance
