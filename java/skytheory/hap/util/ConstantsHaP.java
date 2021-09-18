@@ -51,5 +51,7 @@ public class ConstantsHaP {
 	public static final String CFG_ASM_ENDERMAN = "hap.config.asm_enderman";
 	public static final String CFG_EXTEND = "hap.config.extend";
 	public static final String CFG_COUNT = "hap.config.count";
-	public static final String CFG_RECIPE = "hap.config.recipe";
+	public static final String CFG_RECIPE_REACTOR = "hap.config.recipe_reactor";
+	public static final String CFG_RECIPE_MILL = "hap.config.recipe_mill";
+	public static final String CFG_RECIPE_CRUSHER = "hap.config.recipe_crusher";
 }

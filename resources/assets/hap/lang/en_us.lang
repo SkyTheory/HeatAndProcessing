@@ -97,7 +97,9 @@ hap.config.asm_charm=Charm ASM
 hap.config.asm_enderman=Enderman ASM
 hap.config.extend=Extend Charm Search
 hap.config.count=Max Charm Count
-hap.config.recipe=Additional Reactor Recipes
+hap.config.recipe_reactor=Additional Reactor Recipes
+hap.config.recipe_mill=Stone Mill Ore Recipes
+hap.config.recipe_crusher=Hammer Mill Ore Recipes
 #
 # JEI
 hap.plugin.jei.coke_oven=Coke Oven

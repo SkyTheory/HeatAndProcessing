@@ -97,7 +97,9 @@ hap.config.asm_charm=アクセサリの所持判定を書き換える
 hap.config.asm_enderman=エンダーマンの敵対判定を書き換える
 hap.config.extend=アクセサリの判定範囲を拡張する
 hap.config.count=アクセサリの最大適用個数
-hap.config.recipe=追加リアクターレシピ
+hap.config.recipe_reactor=追加リアクターレシピ
+hap.config.recipe_mill=鉱石辞書石臼レシピ
+hap.config.recipe_crusher=鉱石辞書ハンマーミルレシピ
 #
 # JEI
 hap.plugin.jei.coke_oven=石炭乾留炉
