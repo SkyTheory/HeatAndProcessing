@@ -119,6 +119,8 @@ public class CharmEvent {
 				World world = event.getWorld();
 				BlockPos pos = event.getPos();
 				IBlockState state = world.getBlockState(pos);
+				// 覚書：一応writeToNBTとreadFromNBTで移動できないこともないけれど、素直に無効化した方が良いよね
+				if (world.getTileEntity(pos) != null) return;
 				EnumFacing facing = event.getFace();
 				if (player.isSneaking()) facing = facing.getOpposite();
 				BlockPos target = pos.offset(facing);
