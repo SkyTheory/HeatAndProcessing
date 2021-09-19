@@ -57,10 +57,10 @@ hap.tip.amulet_ub.tips=拾った鉱石、宝石、インゴットや粉を鉱石
 hap.tip.amulet_br.title=素早い収奪
 hap.tip.amulet_br.tips=破壊したブロックのドロップアイテムをインベントリに直接収納する
 
-hap.tip.amulet_rg.title=自然の掌握
+hap.tip.amulet_rg.title=祖霊の把握
 hap.tip.amulet_rg.tips=素手の右クリックでブロックを操作する
 
-hap.tip.amulet_gw.title=ツールの習熟
+hap.tip.amulet_gw.title=自然秩序
 hap.tip.amulet_gw.tips=ブロックを破壊する際に自動的にツールを持ち替える
 
 hap.tip.heat=HeatTier : %s
