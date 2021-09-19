@@ -51,7 +51,7 @@ public class CharmEvent {
 			int[] oreIds = OreDictionary.getOreIDs(stack);
 			for (int oreId : oreIds) {
 				String oreName = OreDictionary.getOreName(oreId);
-				if (oreName.startsWith("ore") || oreName.startsWith("ingot") || oreName.startsWith("dust")) {
+				if (oreName.startsWith("ore") || oreName.startsWith("ingot") || oreName.startsWith("dust") || oreName.startsWith("gem")) {
 					ItemStack converted = getConvertDestination(player, oreName, oreId);
 					converted = converted.copy();
 					if (!stack.isItemEqual(converted)) {

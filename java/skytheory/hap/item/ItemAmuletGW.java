@@ -52,7 +52,7 @@ public class ItemAmuletGW extends Item implements IJewelCharm, IBauble {
 
 	@Override
 	public MagicColor getColor(int meta) {
-		return MagicColor.GREEN;
+		return MagicColor.GREEN_WHITE;
 	}
 
 	@Override

@@ -39,11 +39,11 @@ item.wrench.name=頑丈なレンチ
 
 item.coating_molybdenum.name=モリブデン潤滑剤
 
-item.amulet_wu.name=白の魔除け
-item.amulet_ub.name=青の魔除け
-item.amulet_br.name=黒の魔除け
-item.amulet_rg.name=赤の魔除け
-item.amulet_gw.name=緑の魔除け
+item.amulet_wu.name=白青の魔除け
+item.amulet_ub.name=青黒の魔除け
+item.amulet_br.name=黒赤の魔除け
+item.amulet_rg.name=赤緑の魔除け
+item.amulet_gw.name=緑白の魔除け
 #
 # Tips
 hap.tip.config=HeatAndProcessing Config
@@ -51,8 +51,8 @@ hap.tip.config=HeatAndProcessing Config
 hap.tip.amulet_wu.title=エンド適正
 hap.tip.amulet_wu.tips=冷気耐性ポーション効果をもたらし、エンダーマンと目を合わせても敵対しなくなる
 
-hap.tip.amulet_ub.title=鉱石の再構築
-hap.tip.amulet_ub.tips=拾った鉱石を鉱石辞書に基づいて自動的に変換する
+hap.tip.amulet_ub.title=貪欲な再構築
+hap.tip.amulet_ub.tips=拾った鉱石、宝石、インゴットや粉を鉱石辞書に基づいて自動的に変換する
 
 hap.tip.amulet_br.title=素早い収奪
 hap.tip.amulet_br.tips=破壊したブロックのドロップアイテムをインベントリに直接収納する
@@ -98,8 +98,8 @@ hap.config.asm_enderman=エンダーマンの敵対判定を書き換える
 hap.config.extend=アクセサリの判定範囲を拡張する
 hap.config.count=アクセサリの最大適用個数
 hap.config.recipe_reactor=追加リアクターレシピ
-hap.config.recipe_mill=鉱石辞書石臼レシピ
-hap.config.recipe_crusher=鉱石辞書ハンマーミルレシピ
+hap.config.recipe_mill=鉱石辞書を基に石臼レシピを追加する
+hap.config.recipe_crusher=鉱石辞書を基にハンマーミルレシピを追加する
 #
 # JEI
 hap.plugin.jei.coke_oven=石炭乾留炉

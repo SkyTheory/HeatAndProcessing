@@ -53,7 +53,7 @@ public class ItemAmuletRG extends Item implements IJewelCharm, IBauble {
 
 	@Override
 	public MagicColor getColor(int meta) {
-		return MagicColor.RED;
+		return MagicColor.RED_GREEN;
 	}
 
 	@Override

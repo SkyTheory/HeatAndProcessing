@@ -55,7 +55,7 @@ public class ItemAmuletWU extends Item implements IJewelCharm, IBauble {
 
 	@Override
 	public MagicColor getColor(int meta) {
-		return MagicColor.WHITE;
+		return MagicColor.WHITE_BLUE;
 	}
 
 	@Override

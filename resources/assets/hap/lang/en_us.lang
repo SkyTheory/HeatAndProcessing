@@ -39,11 +39,11 @@ item.wrench.name=Heavy Duty Wrench
 
 item.coating_molybdenum.name=Molybdenum Lubrication Tool
 
-item.amulet_wu.name=White Amulet
-item.amulet_ub.name=Blue Amulet
-item.amulet_br.name=Black Amulet
-item.amulet_rg.name=Red Amulet
-item.amulet_gw.name=Green Amulet
+item.amulet_wu.name=White-Blue Amulet
+item.amulet_ub.name=Blue-Black Amulet
+item.amulet_br.name=Black-Red Amulet
+item.amulet_rg.name=Red-Green Amulet
+item.amulet_gw.name=Green-White Amulet
 #
 # Tips
 hap.tip.config=HeatAndProcessing Config
@@ -51,8 +51,8 @@ hap.tip.config=HeatAndProcessing Config
 hap.tip.amulet_wu.title=Ender Affinity
 hap.tip.amulet_wu.tips=Potion Effect (Cold Registance) and prevent Enderman hostility.
 
-hap.tip.amulet_ub.title=Ore Reconstruct
-hap.tip.amulet_ub.tips=Automatically convert picked ore, ingots and dust.
+hap.tip.amulet_ub.title=Greedy Reconstruction
+hap.tip.amulet_ub.tips=Automatically convert picked ore, gems, ingots and dust.
 
 hap.tip.amulet_br.title=Rapid Looting
 hap.tip.amulet_br.tips=Collect dropped items from blocks directly into your inventory.
