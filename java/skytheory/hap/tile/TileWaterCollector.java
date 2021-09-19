@@ -29,7 +29,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import skytheory.hap.block.BlockWaterCollector;
 import skytheory.hap.util.ConstantsHaP;
@@ -119,12 +118,7 @@ public class TileWaterCollector extends TileEntity implements ITickable, ITileTa
 					handler.fill(toFill, true);
 					world.playSound(null, pos, SoundEvents.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
 					if (!player.isCreative()) {
-						stack.shrink(1);
-						if (stack.isEmpty()) {
-							player.replaceItemInInventory(player.inventory.currentItem, itemFluid.getContainer());
-						} else {
-							ItemHandlerHelper.giveItemToPlayer(player, itemFluid.getContainer());
-						}
+						player.replaceItemInInventory(player.inventory.currentItem, itemFluid.getContainer());
 					}
 				} else {
 					FluidStack toDrain = FluidUtil.tryFluidTransfer(itemFluid, handler, CAPACITY, false);
@@ -132,12 +126,7 @@ public class TileWaterCollector extends TileEntity implements ITickable, ITileTa
 						FluidUtil.tryFluidTransfer(itemFluid, handler, toDrain, true);
 						world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0F, 1.0F);
 						if (!player.isCreative()) {
-							stack.shrink(1);
-							if (stack.isEmpty()) {
-								player.replaceItemInInventory(player.inventory.currentItem, itemFluid.getContainer());
-							} else {
-								ItemHandlerHelper.giveItemToPlayer(player, itemFluid.getContainer());
-							}
+							player.replaceItemInInventory(player.inventory.currentItem, itemFluid.getContainer());
 						}
 					}
 				}

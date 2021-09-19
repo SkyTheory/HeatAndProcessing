@@ -3,11 +3,12 @@ package skytheory.hap.recipe;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import defeatedcrow.hac.api.recipe.ICrusherRecipe;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.main.recipes.device.RegisterCrusherRecipe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 import skytheory.lib.SkyTheoryLib;
 
@@ -15,88 +16,88 @@ import skytheory.lib.SkyTheoryLib;
 public class CrusherRecipes {
 
 	public static void register() {
-		String[] allId = OreDictionary.getOreNames();
-		List<String> oreNamesRaw = new ArrayList<>();
-		List<String> oreNames = new ArrayList<>();
-		List<String> gemNames = new ArrayList<>();
+		List<String> allDictionaryNames = Lists.newArrayList(OreDictionary.getOreNames());
 
-		for (String name : allId) {
-			if (name.startsWith("ore")) {
-				oreNamesRaw.add(name);
-			}
-		}
-
-		for (String oreName : oreNamesRaw) {
-			String gemName = oreName.replaceFirst("ore", "gem");
-			if (OreDictionary.doesOreNameExist(gemName)) {
-				if (!oreNames.contains(oreName)) oreNames.add(oreName);
-				gemNames.add(gemName);
-			}
-			String dustName = oreName.replaceFirst("ore", "dust");
-			if (OreDictionary.doesOreNameExist(dustName)) {
-				if (!oreNames.contains(oreName)) oreNames.add(oreName);
-			}
-		}
-
-		// 覚書：エイリアスとかどっかになかったっけ？
-		oreNames.remove("oreAluminium");
-
-		// 覚書：ExU2のgemRedstoneを除外
-		gemNames.remove("gemRedstone");
-
-		List<String> oreToGemNames = new ArrayList<>(oreNames);
-		List<String> oreToDustNames = new ArrayList<>(oreNames);
-		List<String> gemToDustNames = new ArrayList<>(gemNames);
+		allDictionaryNames.remove("gemPrismarine");
+		allDictionaryNames.remove("oreAluminium"); // 覚書：エイリアスとかどっかになかったっけ？
+//		allDictionaryNames.remove("ingotSteel"); // 覚書：HaCはdustSteelは追加するけれどingotSteelへは不可逆
+		// ……ではあるものの、有効化時にはdustSteelからdustIronへの還元レシピを追加
+		allDictionaryNames.remove("gemRedstone"); // 覚書：ExU2のgemRedstoneを除外
 
 		// 既に対応するレシピがあるなら除外する
-		List<ICrusherRecipe> recipes = RecipeAPI.registerCrushers.getRecipeList();
-		for (ICrusherRecipe recipe : recipes) {
+		for (ICrusherRecipe recipe : RecipeAPI.registerCrushers.getRecipeList()) {
 			Object inputObj = recipe.getInput();
 			if (inputObj instanceof String) {
 				String input = (String) inputObj;
-				oreToGemNames.remove(input);
-				oreToDustNames.remove(input);
-				gemToDustNames.remove(input);
+				allDictionaryNames.remove(input);
 			}
 		}
 
-		for (String gemName : gemToDustNames) {
-			oreToDustNames.remove(gemName.replaceFirst("gem", "ore"));
+		List<String> oreNames = new ArrayList<>();
+		List<String> gemNames = new ArrayList<>();
+		List<String> ingotNames = new ArrayList<>();
+
+		for (String name : allDictionaryNames) {
+			if (name.startsWith("ore")) {
+				oreNames.add(name);
+			}
+			if (name.startsWith("gem")) {
+				gemNames.add(name);
+			}
+			if (name.startsWith("ingot")) {
+				ingotNames.add(name);
+			}
 		}
 
-		// ore*とgem*をICrusherRecipeとして登録する
-		for (String oreName : oreToGemNames) {
-			NonNullList<ItemStack> ores = OreDictionary.getOres(oreName, false);
-			NonNullList<ItemStack> gems = OreDictionary.getOres(oreName.replaceFirst("ore", "gem"), false);
-			if (!ores.isEmpty() && !gems.isEmpty()) {
-				SkyTheoryLib.LOGGER.info(String.format("Register ore to gem recipe for Hammer Mill: %s", oreName.substring(3)));
+		// Oreを素材とするレシピを登録する
+		for (String oreName : oreNames) {
+			if (OreDictionary.getOres(oreName, false).isEmpty()) continue;
+			String gemName = oreName.replaceFirst("ore", "gem");
+			List<ItemStack> gems = OreDictionary.getOres(gemName, false);
+			if (!gems.isEmpty()) {
 				ItemStack gem = gems.get(0).copy();
 				gem.setCount(3);
-				RecipeAPI.registerCrushers.addRecipe(gem, RegisterCrusherRecipe.Ti_Blade, oreName);
+				processRecipe(oreName, gem);
+				// 覚書：Ore -> Gemを登録したならOre -> Dustはスキップ
+				continue;
 			}
-		}
-
-		// ore*とdust*をICrusherRecipeとして登録する
-		for (String oreName : oreToDustNames) {
-			NonNullList<ItemStack> ores = OreDictionary.getOres(oreName, false);
-			NonNullList<ItemStack> dusts = OreDictionary.getOres(oreName.replaceFirst("ore", "dust"), false);
-			if (!ores.isEmpty() && !dusts.isEmpty()) {
-				SkyTheoryLib.LOGGER.info(String.format("Register ore to dust recipe for Hammer Mill: %s", oreName.substring(3)));
+			String dustName = oreName.replaceFirst("ore", "dust");
+			List<ItemStack> dusts = OreDictionary.getOres(dustName, false);
+			if (!dusts.isEmpty()) {
 				ItemStack dust = dusts.get(0).copy();
 				dust.setCount(3);
-				RecipeAPI.registerCrushers.addRecipe(dust, RegisterCrusherRecipe.Ti_Blade, oreName);
+				processRecipe(oreName, dust);
 			}
 		}
 
-		// gem*とdust*をICrusherRecipeとして登録する
-		for (String gemName : gemToDustNames) {
-			NonNullList<ItemStack> gems = OreDictionary.getOres(gemName, false);
-			NonNullList<ItemStack> dusts = OreDictionary.getOres(gemName.replaceFirst("gem", "dust"), false);
-			if (!gems.isEmpty() && !dusts.isEmpty()) {
-				SkyTheoryLib.LOGGER.info(String.format("Register gem to dust recipe for Hammer Mill: %s", gemName.substring(3)));
+		// Gemを素材とするレシピを登録する
+		for (String gemName : gemNames) {
+			if (OreDictionary.getOres(gemName, false).isEmpty()) continue;
+			String dustName = gemName.replaceFirst("gem", "dust");
+			List<ItemStack> dusts = OreDictionary.getOres(dustName, false);
+			if (!dusts.isEmpty()) {
 				ItemStack dust = dusts.get(0).copy();
-				RecipeAPI.registerCrushers.addRecipe(dust, RegisterCrusherRecipe.Ti_Blade, gemName);
+				dust.setCount(1);
+				processRecipe(gemName, dust);
 			}
 		}
+
+		// Ingotを素材とするレシピを登録する
+		for (String ingotName : ingotNames) {
+			if (OreDictionary.getOres(ingotName, false).isEmpty()) continue;
+			String dustName = ingotName.replaceFirst("ingot", "dust");
+			List<ItemStack> dusts = OreDictionary.getOres(dustName, false);
+			if (!dusts.isEmpty()) {
+				ItemStack dust = dusts.get(0).copy();
+				dust.setCount(1);
+				processRecipe(ingotName, dust);
+			}
+		}
+
+	}
+
+	public static void processRecipe(String ingredients, ItemStack result) {
+		SkyTheoryLib.LOGGER.info(String.format("Register %s to %s recipe for Hammer Mill", ingredients, result.getUnlocalizedName()));
+		RecipeAPI.registerCrushers.addRecipe(result, RegisterCrusherRecipe.Ti_Blade, ingredients);
 	}
 }

@@ -1,0 +1,5 @@
+{
+  "conditions": {
+    "factory": "skytheory.hap.recipe.RecipeConditionFactory"
+  }
+}

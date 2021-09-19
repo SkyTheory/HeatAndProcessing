@@ -1,0 +1,20 @@
+{
+	"type": "minecraft:crafting_shapeless",
+	"ingredients": [
+		{
+			"type": "forge:ore_dict",
+			"ore": "dustSteel"
+		}
+	],
+	"result": {
+		"item": "dcs_climate:dcs_oredust",
+		"count": 1,
+		"data": 5
+	},
+	"conditions": [
+		{
+			"type": "hap:factory",
+			"condition": "dustSteel"
+		}
+	]
+}

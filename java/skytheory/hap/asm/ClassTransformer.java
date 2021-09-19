@@ -10,9 +10,8 @@ import skytheory.hap.asm.config.HaPASMConfig;
 public class ClassTransformer implements IClassTransformer {
 
 	public static final String TARGET_ENDERMAN = "net.minecraft.entity.monster.EntityEnderman";
-	public static final String TARGET_ENDERMAN_SRG = "acu";
+	public static final String TARGET_ENDERMAN_OBF = "acu";
 	public static final String TARGET_DCUTIL = "defeatedcrow.hac.core.util.DCUtil";
-	public static final String TARGET_COLOR_PENDANT2 = "defeatedcrow.hac.magic.item.ItemColorPendant2";
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
@@ -23,7 +22,7 @@ public class ClassTransformer implements IClassTransformer {
 			reader.accept(visitor, ClassReader.EXPAND_FRAMES);
 			return writer.toByteArray();
 		}
-		if (transformedName.equals(TARGET_ENDERMAN) || transformedName.equals(TARGET_ENDERMAN_SRG)) {
+		if (transformedName.equals(TARGET_ENDERMAN) || transformedName.equals(TARGET_ENDERMAN_OBF)) {
 			if (HaPASMConfig.asm_enderman) {
 				ClassReader reader = new ClassReader(basicClass);
 				ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
@@ -31,13 +30,6 @@ public class ClassTransformer implements IClassTransformer {
 				reader.accept(visitor, ClassReader.EXPAND_FRAMES);
 				return writer.toByteArray();
 			}
-		}
-		if (transformedName.equals(TARGET_COLOR_PENDANT2) && HaPASMConfig.asm_lumber) {
-			ClassReader reader = new ClassReader(basicClass);
-			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-			ClassVisitor visitor = new ColorPendant2Visitor(writer);
-			reader.accept(visitor, ClassReader.EXPAND_FRAMES);
-			return writer.toByteArray();
 		}
 		return basicClass;
 	}
