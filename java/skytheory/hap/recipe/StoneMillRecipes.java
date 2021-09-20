@@ -1,6 +1,7 @@
 package skytheory.hap.recipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -9,7 +10,6 @@ import defeatedcrow.hac.api.recipe.IMillRecipe;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import scala.actors.threadpool.Arrays;
 import skytheory.hap.config.HaPConfig;
 import skytheory.lib.SkyTheoryLib;
 
