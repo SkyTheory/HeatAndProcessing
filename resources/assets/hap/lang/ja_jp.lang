@@ -97,7 +97,7 @@ hap.config.asm_enderman=エンダーマンの敵対判定を書き換える
 # Config
 hap.config.hud=チャットログを表示中は気候HUDを隠す
 hap.config.shaft=シャフトの操作判定を縮小する
-hap.config.beacon=右クリックで鉱脈ビーコンを除去する
+hap.config.remove_beacon=右クリックで鉱脈ビーコンを除去する
 hap.config.extend=アクセサリの判定範囲を拡張する
 hap.config.count=アクセサリの最大適用個数
 hap.config.recipe_reactor=追加リアクターレシピ

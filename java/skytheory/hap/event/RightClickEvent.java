@@ -13,11 +13,12 @@ public class RightClickEvent {
 	public static void onRightClick(PlayerInteractEvent.RightClickBlock event) {
 		if (HaPConfig.vein_beacon) {
 			World world = event.getWorld();
-			if (!world.isRemote) {
-				BlockPos pos = event.getPos();
-				if (world.getBlockState(pos).getBlock() == MagicInit.veinBeacon) {
+			BlockPos pos = event.getPos();
+			if (world.getBlockState(pos).getBlock() == MagicInit.veinBeacon) {
+				if (!world.isRemote) {
 					world.setBlockToAir(pos);
 				}
+				event.setCanceled(true);
 			}
 		}
 	}

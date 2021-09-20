@@ -97,7 +97,7 @@ hap.config.asm_enderman=Enderman ASM
 # Config
 hap.config.hud=Auto Hide HUD
 hap.config.shaft=Shrink Shaft Hitbox
-hap.config.beacon=Remove Vein Beacon with Right-Clicking
+hap.config.remove_beacon=Remove Vein Beacon with Right-Clicking
 hap.config.extend=Extend Charm Search
 hap.config.count=Max Charm Count
 hap.config.recipe_reactor=Additional Reactor Recipes
