@@ -1,6 +1,7 @@
 package skytheory.hap.recipe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -10,6 +11,7 @@ import defeatedcrow.hac.api.recipe.RecipeAPI;
 import defeatedcrow.hac.main.recipes.device.RegisterCrusherRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import skytheory.hap.config.HaPConfig;
 import skytheory.lib.SkyTheoryLib;
 
 // OreDictioanryからHammerMillRecipeを自動生成して登録する
@@ -18,11 +20,7 @@ public class CrusherRecipes {
 	public static void register() {
 		List<String> allDictionaryNames = Lists.newArrayList(OreDictionary.getOreNames());
 
-		allDictionaryNames.remove("gemPrismarine");
-		allDictionaryNames.remove("oreAluminium"); // 覚書：エイリアスとかどっかになかったっけ？
-//		allDictionaryNames.remove("ingotSteel"); // 覚書：HaCはdustSteelは追加するけれどingotSteelへは不可逆
-		// ……ではあるものの、有効化時にはdustSteelからdustIronへの還元レシピを追加
-		allDictionaryNames.remove("gemRedstone"); // 覚書：ExU2のgemRedstoneを除外
+		allDictionaryNames.removeAll(Arrays.asList(HaPConfig.recipe_ignore));
 
 		// 既に対応するレシピがあるなら除外する
 		for (ICrusherRecipe recipe : RecipeAPI.registerCrushers.getRecipeList()) {
@@ -93,7 +91,6 @@ public class CrusherRecipes {
 				processRecipe(ingotName, dust);
 			}
 		}
-
 	}
 
 	public static void processRecipe(String ingredients, ItemStack result) {

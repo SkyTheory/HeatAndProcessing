@@ -90,16 +90,20 @@ hap.tip.peg.ceil=天井
 hap.tip.peg.floor=床
 hap.tip.peg.wall=壁
 #
+# ASM Config
+hap.config.asm_charm=アクセサリの所持判定を書き換える
+hap.config.asm_enderman=エンダーマンの敵対判定を書き換える
+#
 # Config
 hap.config.hud=チャットログを表示中は気候HUDを隠す
 hap.config.shaft=シャフトの操作判定を縮小する
-hap.config.asm_charm=アクセサリの所持判定を書き換える
-hap.config.asm_enderman=エンダーマンの敵対判定を書き換える
+hap.config.beacon=右クリックで鉱脈ビーコンを除去する
 hap.config.extend=アクセサリの判定範囲を拡張する
 hap.config.count=アクセサリの最大適用個数
 hap.config.recipe_reactor=追加リアクターレシピ
 hap.config.recipe_mill=鉱石辞書を基に石臼レシピを追加する
 hap.config.recipe_crusher=鉱石辞書を基にハンマーミルレシピを追加する
+hap.config.recipe_blacklist=鉱石辞書レシピに対するブラックリスト
 #
 # JEI
 hap.plugin.jei.coke_oven=石炭乾留炉

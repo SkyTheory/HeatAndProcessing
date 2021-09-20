@@ -9,6 +9,8 @@ import defeatedcrow.hac.api.recipe.IMillRecipe;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import scala.actors.threadpool.Arrays;
+import skytheory.hap.config.HaPConfig;
 import skytheory.lib.SkyTheoryLib;
 
 // OreDictioanryからStoneMillRecipeを自動生成して登録する
@@ -17,11 +19,7 @@ public class StoneMillRecipes {
 	public static void register() {
 		List<String> allDictionaryNames = Lists.newArrayList(OreDictionary.getOreNames());
 
-		allDictionaryNames.remove("gemPrismarine");
-		allDictionaryNames.remove("oreAluminium"); // 覚書：エイリアスとかどっかになかったっけ？
-//		allDictionaryNames.remove("ingotSteel"); // 覚書：HaCはdustSteelは追加するけれどingotSteelへは不可逆
-		// ……ではあるものの、有効化時にはdustSteelからdustIronへの還元レシピを追加
-		allDictionaryNames.remove("gemRedstone"); // 覚書：ExU2のgemRedstoneを除外
+		allDictionaryNames.removeAll(Arrays.asList(HaPConfig.recipe_ignore));
 
 		// 既に対応するレシピがあるなら除外する
 		for (IMillRecipe recipe : RecipeAPI.registerMills.getRecipeList()) {
@@ -92,11 +90,9 @@ public class StoneMillRecipes {
 				processRecipe(ingotName, dust);
 			}
 		}
-
 	}
 
 	public static void processRecipe(String ingredients, ItemStack result) {
 		SkyTheoryLib.LOGGER.info(String.format("Register %s to %s recipe for Stone Mill", ingredients, result.getUnlocalizedName()));
-		RecipeAPI.registerMills.addRecipe(result, ingredients);
 	}
 }

@@ -45,13 +45,16 @@ public class ConstantsHaP {
 
 	public static final String TIP_PEG = "hap.tip.peg";
 
-	public static final String CFG_HUD = "hap.config.hud";
-	public static final String CFG_SHAFT = "hap.config.shaft";
 	public static final String CFG_ASM_CHARM = "hap.config.asm_charm";
 	public static final String CFG_ASM_ENDERMAN = "hap.config.asm_enderman";
+
+	public static final String CFG_HUD = "hap.config.hud";
+	public static final String CFG_SHAFT = "hap.config.shaft";
+	public static final String CFG_BEACON = "hap.config.remove_beacon";
 	public static final String CFG_EXTEND = "hap.config.extend";
 	public static final String CFG_COUNT = "hap.config.count";
 	public static final String CFG_RECIPE_REACTOR = "hap.config.recipe_reactor";
 	public static final String CFG_RECIPE_MILL = "hap.config.recipe_mill";
 	public static final String CFG_RECIPE_CRUSHER = "hap.config.recipe_crusher";
+	public static final String CFG_RECIPE_BLACKLIST = "hap.config.recipe_blacklist";
 }

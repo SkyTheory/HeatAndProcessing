@@ -16,6 +16,7 @@ import skytheory.hap.creativetab.CreativeTabsHaP;
 import skytheory.hap.event.CapabilityEvent;
 import skytheory.hap.event.CharmEvent;
 import skytheory.hap.event.ClimateHUDEvent;
+import skytheory.hap.event.RightClickEvent;
 import skytheory.hap.event.TextureEvent;
 import skytheory.hap.event.WrenchEvent;
 import skytheory.hap.init.BlocksHaP;
@@ -36,7 +37,7 @@ public class HeatAndProcessing {
 	public static final String MOD_ID = "hap";
 	public static final String MOD_NAME = "HeatAndProcessing";
 	public static final String MC_VERSION = "1.12.2";
-	public static final String MOD_VERSION = "1.3.1";
+	public static final String MOD_VERSION = "1.3.2";
 	public static final String VERSION = MC_VERSION + "-" + MOD_VERSION;
 
 	@Mod.Instance
@@ -54,6 +55,7 @@ public class HeatAndProcessing {
 		MinecraftForge.EVENT_BUS.register(CapabilityEvent.class);
 		MinecraftForge.EVENT_BUS.register(CharmEvent.class);
 		MinecraftForge.EVENT_BUS.register(ClimateHUDEvent.class);
+		MinecraftForge.EVENT_BUS.register(RightClickEvent.class);
 		MinecraftForge.EVENT_BUS.register(TextureEvent.class);
 		MinecraftForge.EVENT_BUS.register(WrenchEvent.class);
 	}

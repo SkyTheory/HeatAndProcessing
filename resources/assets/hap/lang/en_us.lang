@@ -90,16 +90,20 @@ hap.tip.peg.ceil=ceil
 hap.tip.peg.floor=floor
 hap.tip.peg.wall=wall
 #
+# ASM Config
+hap.config.asm_charm=Charm ASM
+hap.config.asm_enderman=Enderman ASM
+#
 # Config
 hap.config.hud=Auto Hide HUD
 hap.config.shaft=Shrink Shaft Hitbox
-hap.config.asm_charm=Charm ASM
-hap.config.asm_enderman=Enderman ASM
+hap.config.beacon=Remove Vein Beacon with Right-Clicking
 hap.config.extend=Extend Charm Search
 hap.config.count=Max Charm Count
 hap.config.recipe_reactor=Additional Reactor Recipes
 hap.config.recipe_mill=Stone Mill Ore Recipes
 hap.config.recipe_crusher=Hammer Mill Ore Recipes
+hap.config.recipe_blacklist=Ore Recipes Blacklist
 #
 # JEI
 hap.plugin.jei.coke_oven=Coke Oven

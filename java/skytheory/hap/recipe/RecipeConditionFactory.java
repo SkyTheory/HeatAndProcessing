@@ -1,5 +1,6 @@
 package skytheory.hap.recipe;
 
+import java.util.Arrays;
 import java.util.function.BooleanSupplier;
 
 import com.google.gson.JsonObject;
@@ -15,7 +16,7 @@ public class RecipeConditionFactory implements IConditionFactory {
 	public BooleanSupplier parse(JsonContext context, JsonObject json) {
 		if (JsonUtils.hasField(json, "condition")) {
 			String condition = JsonUtils.getString(json, "condition");
-			if (condition.equals("dustSteel")) return () -> HaPConfig.recipe_mill || HaPConfig.recipe_crusher;
+			if (condition.equals("dustSteel")) return () -> !Arrays.asList(HaPConfig.recipe_ignore).contains("dustSteel");
 		}
 		return () -> true;
 	}
