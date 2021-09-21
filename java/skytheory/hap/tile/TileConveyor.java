@@ -66,7 +66,7 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 		this.output = new ItemHandler(1);
 
 		input.setSlotLimit(1);
-		input.setCanInsert((slot, stack) -> ItemHandlerUtils.isEmpty(output));
+		input.setCanInsert((slot, stack) -> progress == 0);
 		input.setCanExtract(false);
 		output.setCanInsert(false);
 
@@ -105,7 +105,7 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 			}
 			boolean extract = progress >= PROGRESS_COUNT;
 			boolean process = progress >= PROGRESS_COUNT / 2;
-			if (process && !ItemHandlerUtils.isEmpty(input) && ItemHandlerUtils.isEmpty(output)) {
+			if (process && !ItemHandlerUtils.isEmpty(input, output)) {
 				// アイテムが中央まで来た時点で精錬を試みる
 				this.processItem();
 			}
@@ -190,9 +190,12 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 		ItemStack ingredient = input.getStackInSlot(0).copy();
 		IClimate climate = ClimateAPI.calculator.getClimate(world, pos);
 		ItemStack product = SmeltingHelper.onSmelting(ingredient, climate);
+		ItemStack outputStack = output.getStackInSlot(0);
 		if (!product.isEmpty()) {
-			ItemStack outputStack = output.getStackInSlot(0);
-			if (!outputStack.isEmpty() && product.isItemEqual(outputStack)) return;
+			if (!outputStack.isEmpty()) {
+				if (!product.isItemEqual(outputStack)) return;
+				if (product.getCount() + outputStack.getCount() > product.getMaxStackSize()) return;
+			}
 			ingredient.shrink(1);
 			if (ingredient.isEmpty()) ingredient = ItemStack.EMPTY;
 			input.setStackInSlot(0, ingredient);
@@ -200,7 +203,9 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 			output.setStackInSlot(0, product);
 			this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.25f, 0.85f);
 		} else {
-			this.thruItem();
+			if (outputStack.isEmpty()) {
+				this.thruItem();
+			}
 		}
 	}
 
