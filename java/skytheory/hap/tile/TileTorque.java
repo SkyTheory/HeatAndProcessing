@@ -8,6 +8,7 @@ import defeatedcrow.hac.api.energy.capability.TorqueCapabilityHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -25,6 +26,9 @@ import skytheory.lib.util.UpdateFrequency;
 
 public abstract class TileTorque extends TileEntity implements ITickable, ITorqueTile, ITorqueReceiver, ISidedTile, IWailaTipTile {
 
+	public static final String KEY_TORQUE = "Torque";
+	public static final String KEY_PREV = "PrevTorque";
+
 	// トルクの更新頻度
 	// 覚書：DCTileEntity.getMaxCool()の値と同値にすること
 	public static final int FREQUENCY = 20;
@@ -37,6 +41,7 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 
 	private UpdateFrequency freq = new UpdateFrequency(FREQUENCY);
 
+	private float prevtorque = 0.0f;
 	private float nexttorque = 0.0f;
 	private float torque = 0.0f;
 
@@ -52,7 +57,8 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 	/**
 	 * Torqueの現在量を取得する
 	 */
-	public float getTorque() {return torque;}
+	// 覚書：Diesel Engineの燃料の更新時に一瞬だけTorqueが途切れるため、前回トルクでも加工などを行えるように変更
+	public float getCurrentTorque() {return Math.max(torque, prevtorque);}
 	public float getNextTorque() {return nexttorque;}
 	public float getFriction() {return TORQUE_FRICTION;}
 	public abstract float getMaxTorque();
@@ -71,7 +77,6 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 	 * トルクの現在値を更新する
 	 */
 	public void updateTorque() {
-		//this.drawTorque();
 		this.torque = this.nexttorque;
 		this.nexttorque = 0.0f;
 		this.provideTorque();
@@ -96,7 +101,7 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 
 	@Override
 	public void getWailaTips(ItemStack stack, List<String> tips, IWailaDataAccessor accessor) {
-		tips.add(TextUtils.format(ConstantsHaP.TIP_TORQUE, String.format("%.2f", this.torque)));
+		tips.add(TextUtils.format(ConstantsHaP.TIP_TORQUE, String.format("%.2f", this.getCurrentTorque())));
 	}
 
 	/*
@@ -117,6 +122,11 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 		return amount - result;
 	}
 
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		return compound;
+	}
+
 	public EnumFacing getBaseSide() {return EnumFacing.DOWN;}
 	public EnumFacing getFaceSide() {return EnumFacing.DOWN;}
 	public void setBaseSide(EnumFacing side) {	}
@@ -126,7 +136,6 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 	public float getCurrentAcceleration() {return 0.0f;}
 	public float getFrictionalForce() {return this.getFriction();}
 	public float getGearTier() {return Float.MAX_VALUE;}
-	public float getCurrentTorque() {return this.getTorque();}
 	public float getRotationalSpeed() {return 0.0f;}
 	public boolean hasFaceSide() {return false;}
 

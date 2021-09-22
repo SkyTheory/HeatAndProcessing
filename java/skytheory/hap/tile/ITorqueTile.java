@@ -24,7 +24,7 @@ public interface ITorqueTile {
 	public void setNextTorque(float amount);
 
 	/** トルクの量を取得する */
-	public float getTorque();
+	public float getCurrentTorque();
 
 	/** 次の更新のためにストックされているトルクの量を取得する */
 	public float getNextTorque();

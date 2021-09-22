@@ -36,11 +36,11 @@ public class TorqueData implements ITorqueHandler, INBTSerializable<NBTTagCompou
 
 	@Override
 	public float getTorqueAmount() {
-		return tile.getTorque();
+		return tile.getCurrentTorque();
 	}
 
 	public float getProvideAmount() {
-		float amount = tile.getTorque() * tile.getFriction();
+		float amount = tile.getCurrentTorque() * tile.getFriction();
 		// 8.0f未満は切り捨てる
 		if (amount <= TORQUE_GATE) amount = 0.0f;
 		return amount;

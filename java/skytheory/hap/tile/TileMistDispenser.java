@@ -45,7 +45,7 @@ public class TileMistDispenser extends TileTorqueRotational implements ITileInte
 	}
 
 	public boolean isEnoughTorque() {
-		return this.getTorque() >= TORQUE_REQUIRED;
+		return this.getCurrentTorque() >= TORQUE_REQUIRED;
 	}
 
 	public DCHumidity getHumidity() {

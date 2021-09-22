@@ -346,9 +346,9 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		if ((skipRecipe || this.validateRecipe()) && recipe != null) {
 			if (progress < this.getTorqueProcess() || skipProcessItem) {
 				// Torqueが必要値を満たしているかをチェック
-				if (this.getTorque() >= this.getTorqueRequired()) {
+				if (this.getCurrentTorque() >= this.getTorqueRequired()) {
 					// 満たしていれば、その分を進捗に追加
-					this.progress = Math.min(progress + this.getTorque(), TORQUE_PROCESS);
+					this.progress = Math.min(progress + this.getCurrentTorque(), TORQUE_PROCESS);
 				} else {
 					// 満たしていなければ、ゆっくりと減衰させる
 					this.progress = Math.max(progress - 16.0f, 0.0f);
@@ -612,7 +612,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	@Override
 	public void getWailaTips(ItemStack stack, List<String> tips, IWailaDataAccessor accessor) {
 		super.getWailaTips(stack, tips, accessor);
-		float torque = this.getTorque();
+		float torque = this.getCurrentTorque();
 		if (torque >= TORQUE_REQUIRED) {
 			int percentage = MathHelper.floor((progress / this.getTorqueProcess()) * 100.0f);
 			tips.add(TextUtils.format(ConstantsHaP.TIP_ACTIVE));

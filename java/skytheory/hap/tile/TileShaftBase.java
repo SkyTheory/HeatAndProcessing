@@ -62,7 +62,7 @@ public abstract class TileShaftBase extends TileTorqueRotational {
 	public void updateSpeed() {
 		float prevSpeed = shaftSpeed;
 		// この速度を目標に加減速する
-		float targetSpeed = (this.getTorque() / this.getMaxTorque()) * SPEED_COEFFICIENT;
+		float targetSpeed = (this.getCurrentTorque() / this.getMaxTorque()) * SPEED_COEFFICIENT;
 		// 前回の速度との差分を求めて、補正後の値を出す
 		float accelDelta = (targetSpeed - shaftSpeed) * ACCEL_COEFFICIENT;
 		// 現在の速度に追加する

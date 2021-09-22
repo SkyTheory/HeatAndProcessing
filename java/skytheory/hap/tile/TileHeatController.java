@@ -14,8 +14,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import skytheory.hap.util.ConstantsHaP;
 import skytheory.hap.util.ClimateTextHelper;
+import skytheory.hap.util.ConstantsHaP;
 import skytheory.lib.capability.datasync.DataSyncHandler;
 import skytheory.lib.network.tile.TileSync;
 import skytheory.lib.util.EnumSide;
@@ -72,7 +72,7 @@ public abstract class TileHeatController extends TileTorqueRotational implements
 	}
 
 	protected boolean isEnoughTorque(DCHeatTier tier) {
-		return this.getTorque() >= this.getTorqueRequired(tier);
+		return this.getCurrentTorque() >= this.getTorqueRequired(tier);
 	}
 
 	/** HeatTierに対するトルクの要求量を返す */
