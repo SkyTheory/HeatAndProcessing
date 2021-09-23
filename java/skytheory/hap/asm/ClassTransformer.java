@@ -11,10 +11,14 @@ public class ClassTransformer implements IClassTransformer {
 
 	public static final String TARGET_ENDERMAN = "net.minecraft.entity.monster.EntityEnderman";
 	public static final String TARGET_ENDERMAN_OBF = "acu";
+
 	public static final String TARGET_DCUTIL = "defeatedcrow.hac.core.util.DCUtil";
+
+	public static final String TARGET_MAINUTIL = "defeatedcrow.hac.main.util.MainUtil";
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
+
 		if (transformedName.equals(TARGET_DCUTIL) && HaPASMConfig.asm_charm) {
 			ClassReader reader = new ClassReader(basicClass);
 			ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
@@ -22,6 +26,7 @@ public class ClassTransformer implements IClassTransformer {
 			reader.accept(visitor, ClassReader.EXPAND_FRAMES);
 			return writer.toByteArray();
 		}
+
 		if (transformedName.equals(TARGET_ENDERMAN) || transformedName.equals(TARGET_ENDERMAN_OBF)) {
 			if (HaPASMConfig.asm_enderman) {
 				ClassReader reader = new ClassReader(basicClass);
@@ -31,6 +36,17 @@ public class ClassTransformer implements IClassTransformer {
 				return writer.toByteArray();
 			}
 		}
+
+		if (transformedName.equals(TARGET_MAINUTIL)) {
+			if (HaPASMConfig.asm_tweaks) {
+				ClassReader reader = new ClassReader(basicClass);
+				ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+				ClassVisitor visitor = new MainUtilVisitor(writer);
+				reader.accept(visitor, ClassReader.EXPAND_FRAMES);
+				return writer.toByteArray();
+			}
+		}
+
 		return basicClass;
 	}
 

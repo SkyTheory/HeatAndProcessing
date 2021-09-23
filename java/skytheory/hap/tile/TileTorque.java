@@ -77,6 +77,7 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 	 * トルクの現在値を更新する
 	 */
 	public void updateTorque() {
+		this.prevtorque = this.torque;
 		this.torque = this.nexttorque;
 		this.nexttorque = 0.0f;
 		this.provideTorque();
@@ -124,6 +125,9 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		compound.setFloat(KEY_TORQUE, torque);
+		compound.setFloat(KEY_PREV, prevtorque);
 		return compound;
 	}
 

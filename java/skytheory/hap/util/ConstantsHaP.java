@@ -45,9 +45,6 @@ public class ConstantsHaP {
 
 	public static final String TIP_PEG = "hap.tip.peg";
 
-	public static final String CFG_ASM_CHARM = "hap.config.asm_charm";
-	public static final String CFG_ASM_ENDERMAN = "hap.config.asm_enderman";
-
 	public static final String CFG_HUD = "hap.config.hud";
 	public static final String CFG_SHAFT = "hap.config.shaft";
 	public static final String CFG_BEACON = "hap.config.remove_beacon";

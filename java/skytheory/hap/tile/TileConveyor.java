@@ -167,12 +167,10 @@ public class TileConveyor extends TileEntity implements ITickable, ISidedTileDir
 			IItemHandler targetHandler = ItemHandlerUtils.getItemHandler(tile, facing);
 			if (targetHandler != null) {
 				boolean transfered = false;
-				for (int i = 0; i < output.getSlots(); i++) {
-					ItemStack stack = output.getStackInSlot(i);
-					if (!stack.isEmpty()) {
-						ItemHandlerUtils.transfer(output, targetHandler, 64);
-						transfered = true;
-					}
+				ItemStack stack = output.getStackInSlot(0);
+				if (!stack.isEmpty()) {
+					ItemHandlerUtils.transfer(output, targetHandler, 64);
+					if (output.getStackInSlot(0).getCount() != stack.getCount()) transfered = true;
 				}
 				if (transfered && tile instanceof TileConveyor) {
 					TileConveyor conveyor = (TileConveyor) tile;
