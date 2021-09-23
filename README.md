@@ -3,6 +3,7 @@ HeatAndClimate addon for Minecraft 1.12.2
 
 このModはdefeatedcrow氏製作のHeatAndClimateModのアドオンです。
 例のごとく、modの使用は自己責任でお願いします。
+ライセンスはresources/License.txtをご参照ください。
 前提Modとして、SkyTheoryLibを要求します。
 
 主に、以下のものを追加します。
@@ -36,6 +37,7 @@ GUIの左上のスロットと、タンクの数字のボタンがフィルタ�
 ・その他小物や反応槽レシピの追加、オプション項目など
 デフォルトの状態では、チャットログを表示中に気候HUDを隠すように設定されています。
 ゲーム内のMod一覧や、configフォルダのHeatAndProcessing.cfgファイルから変更することが可能です。
+一部機能はMinecraftやHeanAndClimateのクラスを書き換えます。競合が起こった場合等はHeatAndProcessingASM.cfgから無効化できます。
 
 最後に
 HeatAndClimateModを製作してくださったdefeatedcrow氏に多大な感謝を！
