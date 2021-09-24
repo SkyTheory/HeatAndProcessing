@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +34,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import skytheory.hap.init.ItemsHaP;
+import skytheory.lib.SkyTheoryLib;
 
 public class CharmEvent {
 
@@ -160,7 +162,7 @@ public class CharmEvent {
 				BlockPos pos = event.getPos();
 				IBlockState state = world.getBlockState(pos);
 				String effectiveTool = state.getBlock().getHarvestTool(state);
-				if (effectiveTool == null && Loader.isModLoaded("quark")) {
+				if (effectiveTool == null && Loader.isModLoaded("quark") && state.getMaterial() == Material.LEAVES) {
 					effectiveTool = "axe";
 				}
 				// ブロックの回収速度を上げるツールを検索する
@@ -172,8 +174,9 @@ public class CharmEvent {
 					}
 				// ブロックの回収に必要なツールを検索する
 				} else if (!state.getMaterial().isToolNotRequired()) {
+					SkyTheoryLib.LOGGER.debug(state.getMaterial());
+					if (stack.canHarvestBlock(state)) return;
 					if (getToolFromState(player, state, stack)) {
-						if (stack.canHarvestBlock(state)) return;
 						event.setCanceled(true);
 						return;
 					}
