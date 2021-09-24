@@ -61,7 +61,7 @@ hap.tip.amulet_rg.title=祖霊の把握
 hap.tip.amulet_rg.tips=素手の右クリックでブロックを操作する
 
 hap.tip.amulet_gw.title=自然秩序
-hap.tip.amulet_gw.tips=ブロックを破壊する際に自動的にツールを持ち替える
+hap.tip.amulet_gw.tips=ブロックを破壊する際に自動的にツールを持ち替える（スニークで無効）
 
 hap.tip.heat=HeatTier : %s
 hap.tip.humidity=Humidity : %s

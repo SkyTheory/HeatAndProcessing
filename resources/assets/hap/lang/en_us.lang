@@ -61,7 +61,7 @@ hap.tip.amulet_rg.title=Shamanic Grasp
 hap.tip.amulet_rg.tips=Manipulate block by right-click with empty hand.
 
 hap.tip.amulet_gw.title=Natural Order
-hap.tip.amulet_gw.tips=Automatically swap tools when breaking blocks.
+hap.tip.amulet_gw.tips=Automatically swap tools when breaking blocks without sneaking.
 
 hap.tip.heat=HeatTier : %s
 hap.tip.humidity=Humidity : %s
