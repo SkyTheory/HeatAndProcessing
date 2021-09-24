@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -159,21 +160,55 @@ public class CharmEvent {
 				BlockPos pos = event.getPos();
 				IBlockState state = world.getBlockState(pos);
 				String effectiveTool = state.getBlock().getHarvestTool(state);
-				if (!stack.getItem().getToolClasses(stack).contains(effectiveTool)) {
-					for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
-						ItemStack slotStack = player.inventory.getStackInSlot(i);
-						if (slotStack.isEmpty()) continue;
-						if (slotStack.getItem() instanceof ItemTool) {
-							if (slotStack.getItem().getToolClasses(slotStack).contains(effectiveTool)) {
-								player.inventory.setInventorySlotContents(i, stack);
-								player.inventory.setInventorySlotContents(player.inventory.currentItem, slotStack);
-								event.setCanceled(true);
-								return;
-							}
-						}
+				if (effectiveTool == null && Loader.isModLoaded("quark")) {
+					effectiveTool = "axe";
+				}
+				// ブロックの回収速度を上げるツールを検索する
+				if (effectiveTool != null) {
+					if (stack.getItem().getToolClasses(stack).contains(effectiveTool)) return;
+					if (getToolFromString(player, effectiveTool, stack)) {
+						event.setCanceled(true);
+						return;
+					}
+				// ブロックの回収に必要なツールを検索する
+				} else if (!state.getMaterial().isToolNotRequired()) {
+					if (getToolFromState(player, state, stack)) {
+						if (stack.canHarvestBlock(state)) return;
+						event.setCanceled(true);
+						return;
 					}
 				}
 			}
 		}
+	}
+
+	private static boolean getToolFromString(EntityPlayer player, String toolClass, ItemStack currentStack) {
+		for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
+			ItemStack slotStack = player.inventory.getStackInSlot(i);
+			if (slotStack.isEmpty()) continue;
+			if (slotStack.getItem() instanceof ItemTool) {
+				if (slotStack.getItem().getToolClasses(slotStack).contains(toolClass)) {
+					player.inventory.setInventorySlotContents(i, currentStack);
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, slotStack);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean getToolFromState(EntityPlayer player, IBlockState state, ItemStack currentStack) {
+		for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
+			ItemStack slotStack = player.inventory.getStackInSlot(i);
+			if (slotStack.isEmpty()) continue;
+			if (slotStack.getItem() instanceof ItemTool) {
+				if (slotStack.canHarvestBlock(state)) {
+					player.inventory.setInventorySlotContents(i, currentStack);
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, slotStack);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }
