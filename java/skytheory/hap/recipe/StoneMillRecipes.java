@@ -2,11 +2,12 @@ package skytheory.hap.recipe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.Lists;
-
-import defeatedcrow.hac.api.recipe.IMillRecipe;
+import defeatedcrow.hac.api.recipe.ICrusherRecipe;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -17,16 +18,31 @@ import skytheory.lib.SkyTheoryLib;
 public class StoneMillRecipes {
 
 	public static void register() {
-		List<String> allDictionaryNames = Lists.newArrayList(OreDictionary.getOreNames());
-
+		Set<String> allDictionaryNames = new HashSet<>();
+		allDictionaryNames.addAll(Arrays.asList(OreDictionary.getOreNames()));
 		allDictionaryNames.removeAll(Arrays.asList(HaPConfig.recipe_ignore));
 
 		// 既に対応するレシピがあるなら除外する
-		for (IMillRecipe recipe : RecipeAPI.registerMills.getRecipeList()) {
+		for (ICrusherRecipe recipe : RecipeAPI.registerCrushers.getRecipeList()) {
 			Object inputObj = recipe.getInput();
 			if (inputObj instanceof String) {
 				String input = (String) inputObj;
 				allDictionaryNames.remove(input);
+			} else {
+				List<ItemStack> items = recipe.getProcessedInput();
+				if (!items.isEmpty()) {
+					Set<String> names1 = getOreNames(items.get(0));
+					for (int i = 1; i < items.size() && !names1.isEmpty(); i++) {
+						Set<String> names2 = getOreNames(items.get(i));
+						Iterator<String> it = names1.iterator();
+						while (it.hasNext()) {
+							if (!names2.contains(it.next())) {
+								it.remove();
+							}
+						}
+					}
+					allDictionaryNames.removeAll(names1);
+				}
 			}
 		}
 
@@ -92,7 +108,16 @@ public class StoneMillRecipes {
 		}
 	}
 
+	public static Set<String> getOreNames(ItemStack stack) {
+		Set<String> result = new HashSet<>();
+		for (int id : OreDictionary.getOreIDs(stack)) {
+			result.add(OreDictionary.getOreName(id));
+		}
+		return result;
+	}
+
 	public static void processRecipe(String ingredients, ItemStack result) {
 		SkyTheoryLib.LOGGER.info(String.format("Register %s to %s recipe for Stone Mill", ingredients, result.getUnlocalizedName()));
+		RecipeAPI.registerMills.addRecipe(result, ingredients);
 	}
 }
