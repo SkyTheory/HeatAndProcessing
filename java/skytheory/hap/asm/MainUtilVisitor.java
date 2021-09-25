@@ -10,7 +10,7 @@ public class MainUtilVisitor extends ClassVisitor implements Opcodes {
 	public static final String TARGET_OWNER = "defeatedcrow/hac/main/util/MainUtil";
 	public static final String TARGET_METHOD = "getLumberTargetList";
 	public static final String TARGET_DESC = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;I)Ljava/util/Set;";
-	public static final String HOOK_OWNER = "skytheory/hac/asm/MainUtilHook";
+	public static final String HOOK_OWNER = "skytheory/hap/asm/MainUtilHook";
 	public static final String HOOK_NAME = "hookLumberjack";
 	public static final String HOOK1_DESC = "(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;)Z;";
 	public static final String HOOK2_DESC = "(Lnet/minecraft/util/math/BlockPos;)Ljava/util/Set;";

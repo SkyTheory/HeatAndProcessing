@@ -34,7 +34,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import skytheory.hap.init.ItemsHaP;
-import skytheory.lib.SkyTheoryLib;
 
 public class CharmEvent {
 
@@ -174,8 +173,7 @@ public class CharmEvent {
 					}
 				// ブロックの回収に必要なツールを検索する
 				} else if (!state.getMaterial().isToolNotRequired()) {
-					SkyTheoryLib.LOGGER.debug(state.getMaterial());
-					if (stack.canHarvestBlock(state)) return;
+					if (stack.getDestroySpeed(state) > 1.0f) return;
 					if (getToolFromState(player, state, stack)) {
 						event.setCanceled(true);
 						return;
@@ -205,7 +203,7 @@ public class CharmEvent {
 			ItemStack slotStack = player.inventory.getStackInSlot(i);
 			if (slotStack.isEmpty()) continue;
 			if (slotStack.getItem() instanceof ItemTool) {
-				if (slotStack.canHarvestBlock(state)) {
+				if (slotStack.getDestroySpeed(state) > 1.0f) {
 					player.inventory.setInventorySlotContents(i, currentStack);
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, slotStack);
 					return true;
