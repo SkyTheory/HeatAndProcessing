@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import defeatedcrow.hac.api.recipe.ICrusherRecipe;
+import defeatedcrow.hac.api.recipe.IMillRecipe;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
@@ -23,7 +23,7 @@ public class StoneMillRecipes {
 		allDictionaryNames.removeAll(Arrays.asList(HaPConfig.recipe_ignore));
 
 		// 既に対応するレシピがあるなら除外する
-		for (ICrusherRecipe recipe : RecipeAPI.registerCrushers.getRecipeList()) {
+		for (IMillRecipe recipe : RecipeAPI.registerMills.getRecipeList()) {
 			Object inputObj = recipe.getInput();
 			if (inputObj instanceof String) {
 				String input = (String) inputObj;
