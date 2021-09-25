@@ -2,6 +2,7 @@ package skytheory.hap.event;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 import defeatedcrow.hac.core.util.DCUtil;
 import defeatedcrow.hac.main.ClimateMain;
@@ -154,42 +155,53 @@ public class CharmEvent {
 		if (player.isCreative()) return;
 		if (player.isSneaking()) return;
 		if (event.getHand() == EnumHand.OFF_HAND) return;
-		ItemStack stack = event.getItemStack();
-		if (stack.getItem() instanceof ItemTool) {
+		ItemStack current = event.getItemStack();
+		if (current.getItem() instanceof ItemTool) {
 			if (DCUtil.hasCharmItem(player, GREEN_WHITE)) {
 				World world = event.getWorld();
 				BlockPos pos = event.getPos();
 				IBlockState state = world.getBlockState(pos);
+
+				// ブロックの回収に必要なツールを検索する
+				if (!state.getMaterial().isToolNotRequired()) {
+					Predicate<ItemStack> condition = slot -> slot.canHarvestBlock(state);
+					if (condition.test(current)) return;
+					if (getToolIndex(player, condition)) {
+						return;
+					}
+				}
+
+				// ブロックの回収速度を上げるツールを検索する
 				String effectiveTool = state.getBlock().getHarvestTool(state);
 				if (effectiveTool == null && Loader.isModLoaded("quark") && state.getMaterial() == Material.LEAVES) {
 					effectiveTool = "axe";
 				}
-				// ブロックの回収速度を上げるツールを検索する
 				if (effectiveTool != null) {
-					if (stack.getItem().getToolClasses(stack).contains(effectiveTool)) return;
-					if (getToolFromString(player, effectiveTool, stack)) {
-						event.setCanceled(true);
+					final String tool = effectiveTool;
+					Predicate<ItemStack> condition = slot -> slot.getItem().getToolClasses(slot).contains(tool);
+					if (condition.test(current)) return;
+					if (getToolIndex(player, condition)) {
 						return;
 					}
-				// ブロックの回収に必要なツールを検索する
-				} else if (!state.getMaterial().isToolNotRequired()) {
-					if (stack.getDestroySpeed(state) > 1.0f) return;
-					if (getToolFromState(player, state, stack)) {
-						event.setCanceled(true);
-						return;
-					}
+				}
+
+				// ブロックの回収速度を上げるツールを検索する
+				Predicate<ItemStack> condition = slot -> slot.getDestroySpeed(state) > 1.0f;
+				if (condition.test(current)) return;
+				if (getToolIndex(player, condition)) {
+					return;
 				}
 			}
 		}
 	}
 
-	private static boolean getToolFromString(EntityPlayer player, String toolClass, ItemStack currentStack) {
+	private static boolean getToolIndex(EntityPlayer player, Predicate<ItemStack> isTool) {
 		for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
 			ItemStack slotStack = player.inventory.getStackInSlot(i);
 			if (slotStack.isEmpty()) continue;
 			if (slotStack.getItem() instanceof ItemTool) {
-				if (slotStack.getItem().getToolClasses(slotStack).contains(toolClass)) {
-					player.inventory.setInventorySlotContents(i, currentStack);
+				if (isTool.test(slotStack)) {
+					player.inventory.setInventorySlotContents(i, player.inventory.getCurrentItem());
 					player.inventory.setInventorySlotContents(player.inventory.currentItem, slotStack);
 					return true;
 				}
@@ -198,18 +210,4 @@ public class CharmEvent {
 		return false;
 	}
 
-	private static boolean getToolFromState(EntityPlayer player, IBlockState state, ItemStack currentStack) {
-		for (int i = 0; i < player.inventory.mainInventory.size(); i++) {
-			ItemStack slotStack = player.inventory.getStackInSlot(i);
-			if (slotStack.isEmpty()) continue;
-			if (slotStack.getItem() instanceof ItemTool) {
-				if (slotStack.getDestroySpeed(state) > 1.0f) {
-					player.inventory.setInventorySlotContents(i, currentStack);
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, slotStack);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
 }
