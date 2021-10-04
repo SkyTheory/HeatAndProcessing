@@ -97,6 +97,17 @@ public class BlockReactorAdvanced extends BlockTorque {
 	}
 
 	@Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+    	TileEntity tile = world.getTileEntity(pos);
+    	if (tile instanceof TileReactorAdvanced) {
+    		((TileReactorAdvanced) tile).skipInputItem = false;
+    		((TileReactorAdvanced) tile).skipOutputItem = false;
+    		((TileReactorAdvanced) tile).skipInputFluid = false;
+    		((TileReactorAdvanced) tile).skipOutputFluid = false;
+    	}
+    }
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		if (ClimateCore.proxy.isShiftKeyDown()) {

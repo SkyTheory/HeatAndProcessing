@@ -58,6 +58,7 @@ import skytheory.lib.util.EnumSide;
 import skytheory.lib.util.FacingUtils;
 import skytheory.lib.util.ItemHandlerUtils;
 import skytheory.lib.util.TextUtils;
+import skytheory.lib.util.UpdateFrequency;
 
 
 public class TileReactorAdvanced extends TileTorqueDirectional implements ITickable, ITileInventory, ITileTank, ITileInteract, IDataSync {
@@ -99,13 +100,21 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	private boolean[] tankLock = {false, false, false, false};
 	private FluidStack[] tankFilter = new FluidStack[4];
 
-
+	public boolean skipTransport = false;
+	public boolean skipInputItem = false;
+	public boolean skipOutputItem = false;
+	public boolean skipInputFluid = false;
+	public boolean skipOutputFluid = false;
 	// インベントリに変更があるまで流体のアイテム・タンク間の輸送をスキップするフラグ
-	public boolean[] skipTransferFluid = {true, true, true, true};
+	public boolean skipInternalTank = false;
+	public boolean[] skipInternalTanks = {true, true, true, true};
 	// 出力先に空きができるまで加工をスキップするフラグ
 	public boolean skipProcessItem;
 	// レシピ判定をスキップするフラグ
 	public boolean skipRecipe;
+
+	// アイテムの取り寄せ周期
+	public UpdateFrequency freq = new UpdateFrequency(16);
 
 	@Override
 	public void setWorld(World worldIn) {
@@ -240,35 +249,43 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		return this.heatTier;
 	}
 
+	public static long time;
+
 	public void update() {
 		super.update();
 		if (!world.isRemote) {
-			EnumFacing facing = this.getFacing(EnumSide.LEFT);
-			TileEntity tile = world.getTileEntity(this.getPos().offset(this.getFacing(EnumSide.LEFT)));
-			IItemHandler itemHandler = null;
-			IFluidHandler fluidHandler = null;
-			if (tile != null) {
-				 itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
-				 fluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite());
-			}
-			// アイテムの自動搬入処理
-			if (tile != null) this.updateInput(itemHandler, fluidHandler);
-			// 内部タンクのインベントリへ液体受け渡し
 			this.updateInternalTank();
-			// レシピが利用できるか、変更されていないかをチェック
-			this.updateProcessing();
-			// アイテムの自動搬出処理
-			if (tile != null) this.updateOutput(itemHandler, fluidHandler);
+			if (skipTransport) {
+				// レシピが利用できるか、変更されていないかをチェック
+				this.updateProcessing();
+			} else {
+				this.skipTransport = true;
+				EnumFacing facing = this.getFacing(EnumSide.LEFT);
+				TileEntity tile = world.getTileEntity(this.getPos().offset(this.getFacing(EnumSide.LEFT)));
+				// 内部タンクのインベントリへ液体受け渡し
+				if (tile != null) {
+					IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
+					IFluidHandler fluidHandler = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite());
+					// アイテムの自動搬入処理
+					this.updateInput(itemHandler, fluidHandler);
+					// レシピが利用できるか、変更されていないかをチェック
+					this.updateProcessing();
+					// アイテムの自動搬出処理
+					this.updateOutput(itemHandler, fluidHandler);
+				}
+			}
 		}
 	}
 
 	public void updateInput(IItemHandler itemHandler, IFluidHandler fluidHandler) {
-		if (itemHandler != null) {
+		if (!skipInputItem && itemHandler != null) {
+			this.skipInputItem = true;
 			if (!ItemHandlerUtils.isEmpty(itemFilter)) {
 				retrieveItem(itemHandler);
 			}
 		}
-		if (fluidHandler != null) {
+		if (!skipInputFluid && fluidHandler != null) {
+			this.skipInputFluid = true;
 			retrieveFluid(fluidHandler);
 		}
 	}
@@ -293,12 +310,14 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	}
 
 	public void updateInternalTank() {
+		if (skipInternalTank) return;
 		for (int i = 0; i < tanks.length; i++) {
-			if (!skipTransferFluid[i]) {
+			if (!skipInternalTanks[i]) {
 				this.transferFluid(i);
-				this.skipTransferFluid[i] = true;
+				this.skipInternalTanks[i] = true;
 			}
 		}
+		this.skipInternalTank = true;
 	}
 
 	public void transferFluid(int index) {
@@ -341,33 +360,47 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	}
 
 	public void updateProcessing() {
-		this.prevProgress = progress;
 		// レシピに変更がないかをチェック
-		if ((skipRecipe || this.validateRecipe()) && recipe != null) {
-			if (progress < this.getTorqueProcess() || skipProcessItem) {
-				// Torqueが必要値を満たしているかをチェック
-				if (this.getCurrentTorque() >= this.getTorqueRequired()) {
-					// 満たしていれば、その分を進捗に追加
-					this.progress = Math.min(progress + this.getCurrentTorque(), TORQUE_PROCESS);
+		if ((skipRecipe || this.validateRecipe())) {
+			if (recipe != null) {
+				this.prevProgress = progress;
+				if (progress < this.getTorqueProcess() || skipProcessItem) {
+					// Torqueが必要値を満たしているかをチェック
+					if (this.getCurrentTorque() >= this.getTorqueRequired()) {
+						// 満たしていれば、その分を進捗に追加
+						this.progress = Math.min(progress + this.getCurrentTorque(), TORQUE_PROCESS);
+					} else {
+						// 満たしていなければ、ゆっくりと減衰させる
+						this.progress = Math.max(progress - 16.0f, 0.0f);
+					}
+					if (skipProcessItem && freq.shouldUpdate()) {
+						this.skipTransport = false;
+						this.skipOutputItem = false;
+						this.skipOutputFluid = false;
+					}
 				} else {
-					// 満たしていなければ、ゆっくりと減衰させる
-					this.progress = Math.max(progress - 16.0f, 0.0f);
+					// Torqueが必要値に達していれば加工を行う
+					if (this.onProcess()) {
+						// 加工に成功したなら進捗をリセット
+						this.progress = 0.0f;
+					} else {
+						// 失敗したなら待機フラグを入れる
+						this.skipProcessItem = true;
+					}
+				}
+				if (prevProgress != progress) {
+					TileSync.sendToClient(this, DataSyncHandler.SYNC_DATA_CAPABILITY);
 				}
 			} else {
-				// Torqueが必要値に達していれば加工を行う
-				if (this.onProcess()) {
-					// 加工に成功したなら進捗をリセット
-					this.progress = 0.0f;
-				} else {
-					// 失敗したなら待機フラグを入れる
-					this.skipProcessItem = true;
+				if (freq.shouldUpdate()) {
+					this.skipTransport = false;
+					this.skipInputItem = false;
+					this.skipInputFluid = false;
 				}
 			}
-		} else {
+		} else if (progress != 0.0f) {
 			// レシピに変更があった場合は進捗をリセット
 			this.progress = 0.0f;
-		}
-		if (prevProgress != progress) {
 			TileSync.sendToClient(this, DataSyncHandler.SYNC_DATA_CAPABILITY);
 		}
 	}
@@ -377,6 +410,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	 */
 	public boolean validateRecipe() {
 		this.skipRecipe = true;
+		this.skipProcessItem = false;
 		DCHeatTier heat = this.getHeatTier();
 		FluidStack fluid1 = tankInput1.getFluid();
 		FluidStack fluid2 = tankInput2.getFluid();
@@ -476,10 +510,12 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	}
 
 	public void updateOutput(IItemHandler itemHandler, IFluidHandler fluidHandler) {
-		if (itemHandler != null) {
+		if (!skipOutputItem && itemHandler != null) {
+			this.skipOutputItem = true;
 			this.sendItem(itemHandler);
 		}
-		if (fluidHandler != null) {
+		if (!skipOutputFluid && fluidHandler != null) {
+			this.skipOutputFluid = true;
 			this.sendFluid(fluidHandler);
 		}
 	}
@@ -587,10 +623,20 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	public void onItemHandlerChanged(IItemHandler handler, int slot) {
 		this.markDirty();
 		if (!world.isRemote) {
-			TileSync.sendToClient(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
-			if (handler == this.itemFluidContainer) this.skipTransferFluid[slot] = false;
-			if (handler == this.itemOutput) this.skipProcessItem = false;
+			if (handler == this.itemFluidContainer) {
+				this.skipInternalTank = false;
+				this.skipInternalTanks[slot] = false;
+			}
+			if (handler == this.itemInput) {
+				this.skipInputItem = false;
+			}
+			if (handler == this.itemOutput) {
+				this.skipOutputItem = false;
+				this.skipProcessItem = false;
+			}
+			this.skipTransport = false;
 			this.skipRecipe = false;
+			TileSync.sendToClient(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
 		}
 	}
 
@@ -598,9 +644,16 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	public void onFluidHandlerChanged(IFluidHandler handler) {
 		this.markDirty();
 		if (!world.isRemote) {
-			TileSync.sendToClient(this, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
-			this.skipProcessItem = false;
+			if (handler == this.tankInput1 || handler == this.tankInput2) {
+				this.skipInputFluid = false;
+			}
+			if (handler == this.tankOutput1 || handler == this.tankOutput2) {
+				this.skipOutputFluid = false;
+				this.skipProcessItem = false;
+			}
+			this.skipTransport = false;
 			this.skipRecipe = false;
+			TileSync.sendToClient(this, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
 		}
 	}
 

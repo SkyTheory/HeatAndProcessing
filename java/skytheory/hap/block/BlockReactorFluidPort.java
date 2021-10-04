@@ -26,6 +26,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,6 +35,7 @@ import skytheory.hap.tile.TileReactorFluidPort;
 import skytheory.hap.util.ConstantsHaP;
 import skytheory.lib.block.IWrenchBlock;
 import skytheory.lib.plugin.waila.IWailaTipBlock;
+import skytheory.lib.util.EnumRotation;
 import skytheory.lib.util.EnumSide;
 import skytheory.lib.util.FacingHelper;
 import skytheory.lib.util.STLibConstants;
@@ -154,6 +156,21 @@ public class BlockReactorFluidPort extends BlockContainer implements IWrenchBloc
 		IBlockState state = accessor.getBlockState();
 		tips.add(I18n.format(STLibConstants.TIP_FACING, state.getValue(FACING).getName()));
 	}
+
+	@Override
+    public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		EnumFacing facing = world.getBlockState(pos).getValue(FACING);
+		EnumFacing right = EnumRotation.fromFacing(facing).getFacing(EnumSide.RIGHT);
+		BlockPos rightPos = pos.offset(right);
+		if (!rightPos.equals(neighbor)) {
+			if (world.getBlockState(rightPos).getBlock() == this) {
+				if (world.getBlockState(rightPos).getValue(FACING) != facing) {
+					return;
+				}
+			}
+			world.getBlockState(rightPos).getBlock().onNeighborChange(world, rightPos, pos);
+		}
+    }
 
 	@Override
 	@SideOnly(Side.CLIENT)
