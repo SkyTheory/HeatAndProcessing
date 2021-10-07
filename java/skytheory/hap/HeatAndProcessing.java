@@ -29,7 +29,7 @@ import skytheory.lib.init.ResourceRegister;
 		name=HeatAndProcessing.MOD_NAME,
 		version=HeatAndProcessing.VERSION,
 		guiFactory = "skytheory.hap.config.HaPConfigGuiFactory",
-		dependencies = "required-after:dcs_climate@[3.8.0,);required-after:stlib@[1.12.2-1.2.0,)"
+		dependencies = "required-after:dcs_climate@[3.8.0,);required-after:stlib@[1.12.2-1.3.0,)"
 	)
 
 public class HeatAndProcessing {
