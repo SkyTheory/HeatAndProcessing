@@ -92,4 +92,18 @@ public class WrenchTypesHaP {
 			return false;
 		}
 	};
+
+	public static final IWrenchType DC_PLAYER_PALEL = new WrenchType("DC_Player_Panel") {
+		@Override
+		public void interact(EntityPlayer player, World world, BlockPos pos, EnumHand hand,
+				EnumFacing facing) {
+			if (player.isSneaking()) {
+				WrenchHelper.rotateFacing(world, pos, EnumFacing.UP);
+			}
+		}
+		@Override
+		public boolean skipActivateBlock(EntityPlayer player, World world, BlockPos pos, EnumFacing side) {
+			return false;
+		}
+	};
 }

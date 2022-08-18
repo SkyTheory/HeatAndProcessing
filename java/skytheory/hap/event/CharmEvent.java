@@ -128,7 +128,7 @@ public class CharmEvent {
 				if (player.isSneaking()) facing = facing.getOpposite();
 				BlockPos target = pos.offset(facing);
 				IBlockState targetState = world.getBlockState(target);
-				if (BlockPistonBase.canPush(state, world, pos, facing.getOpposite(), false, facing)) {
+				if (BlockPistonBase.canPush(state, world, pos, facing, false, facing.getOpposite())) {
 					if (world.isAirBlock(target) || targetState.getMobilityFlag() == EnumPushReaction.DESTROY) {
 						event.setCanceled(true);
 						if (world.isRemote) return;
@@ -137,10 +137,11 @@ public class CharmEvent {
 							Block block = state.getBlock();
 							SoundType soundtype = block.getSoundType(state, world, pos, null);
 							world.playSound(null, pos, soundtype.getBreakSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
-							world.setBlockState(target, state);
 							world.setBlockState(pos, Blocks.AIR.getDefaultState());
 							if (targetState.getMobilityFlag() == EnumPushReaction.DESTROY && !player.isCreative()) {
 								targetState.getBlock().harvestBlock(world, player, target, targetState, null, ItemStack.EMPTY);
+							} else {
+								world.setBlockState(target, state);
 							}
 						}
 					}

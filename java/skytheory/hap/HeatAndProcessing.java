@@ -29,7 +29,7 @@ import skytheory.lib.init.ResourceRegister;
 		name=HeatAndProcessing.MOD_NAME,
 		version=HeatAndProcessing.VERSION,
 		guiFactory = "skytheory.hap.config.HaPConfigGuiFactory",
-		dependencies = "required-after:dcs_climate@[3.8.0,);required-after:stlib@[1.12.2-1.3.0,)"
+		dependencies = "required-after:dcs_climate@[3.9.7,);required-after:stlib@[1.12.2-1.3.0,)"
 	)
 
 public class HeatAndProcessing {
@@ -37,7 +37,7 @@ public class HeatAndProcessing {
 	public static final String MOD_ID = "hap";
 	public static final String MOD_NAME = "HeatAndProcessing";
 	public static final String MC_VERSION = "1.12.2";
-	public static final String MOD_VERSION = "1.3.5";
+	public static final String MOD_VERSION = "1.3.6";
 	public static final String VERSION = MC_VERSION + "-" + MOD_VERSION;
 
 	@Mod.Instance

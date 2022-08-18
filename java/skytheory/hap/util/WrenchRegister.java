@@ -76,6 +76,8 @@ public class WrenchRegister {
 
 		WrenchRegistry.register(MachineInit.catapult, WrenchTypesHaP.DC_CATAPULT);
 
+		WrenchRegistry.register(MachineInit.playerPanel, WrenchTypesHaP.DC_PLAYER_PALEL);
+
 		WrenchRegistry.registerType(DCSidedBlock.class, WrenchTypesHaP.DC_FLAG);
 		WrenchRegistry.registerType(BlockSlabDC.class, WrenchTypesHaP.DC_SLAB);
 		WrenchRegistry.registerType(BlockHopperFilter.class, WrenchTypesHaP.DC_ALL_FACINGS);
