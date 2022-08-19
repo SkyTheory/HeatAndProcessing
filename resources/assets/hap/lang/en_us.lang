@@ -84,6 +84,9 @@ hap.tip.coke_oven=Higher HeatTier to increase speed and decrease secondary outpu
 hap.tip.reactor.advanced=Auto input/output. (Requires filter settings.)
 hap.tip.reactor_fluidport=Place it on the left side of reactor and place the tank above or behind it.
 hap.tip.reactor_storage=Place it on the left of the reactor or fluid port.
+hap.tip.smelting_plate1=Can places item with right-click.
+hap.tip.smelting_plate2=If there have climate-recipe, will be done.
+hap.tip.smelting_plate3=Foods that are not climate-recipe can be cooked at temperatures OVEN or higher, regardless of Airflow.
 
 hap.tip.peg=Peg : %s
 hap.tip.peg.ceil=ceil

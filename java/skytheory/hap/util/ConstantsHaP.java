@@ -28,6 +28,9 @@ public class ConstantsHaP {
 	public static final String TIP_HEATER = "hap.tip.climate_controller.heat";
 	public static final String TIP_FREEZER = "hap.tip.climate_controller.cool";
 	public static final String TIP_MIST = "hap.tip.climate_controller.wet";
+	public static final String TIP_PLATE1 = "hap.tip.smelting_plate1";
+	public static final String TIP_PLATE2 = "hap.tip.smelting_plate2";
+	public static final String TIP_PLATE3 = "hap.tip.smelting_plate3";
 
 	public static final String TIP_REACTOR = "hap.tip.reactor.advanced";
 	public static final String TIP_REACTOR_FLUIDPORT = "hap.tip.reactor_fluidport";

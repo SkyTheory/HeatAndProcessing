@@ -84,6 +84,9 @@ hap.tip.climate_controller.wet=正面1ブロックを加湿します。
 hap.tip.reactor.advanced=自動搬出入機能付き。 （フィルタ設定が必要です。）
 hap.tip.reactor.fluidport=発展化学反応層の左側に設置し、天面または背面のタンクへのアクセスを可能にします。
 hap.tip.reactor.storage=発展化学反応層または液体搬出入口の左側に設置します。
+hap.tip.smelting_plate1=右クリックでアイテムを設置できます。
+hap.tip.smelting_plate2=設置した対象が気候精錬可能だった場合、精錬を行います。
+hap.tip.smelting_plate3=気候精錬でない食材はAirflowにかかわらず、温度OVEN以上で調理可能です。
 
 hap.tip.peg=ペグ : %s
 hap.tip.peg.ceil=天井
