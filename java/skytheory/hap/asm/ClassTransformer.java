@@ -14,8 +14,6 @@ public class ClassTransformer implements IClassTransformer {
 
 	public static final String TARGET_DCUTIL = "defeatedcrow.hac.core.util.DCUtil";
 
-	public static final String TARGET_MAINUTIL = "defeatedcrow.hac.main.util.MainUtil";
-
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] basicClass) {
 
@@ -32,16 +30,6 @@ public class ClassTransformer implements IClassTransformer {
 				ClassReader reader = new ClassReader(basicClass);
 				ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 				ClassVisitor visitor = new EndermanVisitor(name, writer);
-				reader.accept(visitor, ClassReader.EXPAND_FRAMES);
-				return writer.toByteArray();
-			}
-		}
-
-		if (transformedName.equals(TARGET_MAINUTIL)) {
-			if (HaPASMConfig.asm_tweaks) {
-				ClassReader reader = new ClassReader(basicClass);
-				ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-				ClassVisitor visitor = new MainUtilVisitor(writer);
 				reader.accept(visitor, ClassReader.EXPAND_FRAMES);
 				return writer.toByteArray();
 			}

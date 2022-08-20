@@ -66,7 +66,7 @@ public abstract class TileTorqueRotational extends TileTorque implements ISidedT
 		if (this.isOutputSide(accessor.getSide())) {
 			tips.add(TextUtils.format(ConstantsHaP.TIP_OUTPUT));
 		}
-		// HalcyonLibのConfig
+		// SkyTheoryLibのConfig
 		if (Config.debug_tips) {
 			tips.add(rotation.getName());
 			tips.add(TextUtils.format(STLibConstants.TIP_SIDE, this.getSide(accessor.getSide()).getName()));

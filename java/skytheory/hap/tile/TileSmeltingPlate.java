@@ -32,12 +32,16 @@ import skytheory.lib.util.ItemHandlerUtils;
 
 public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTileDirectional, ITileInventory {
 
+	public static int IDLE_COUNT = 200;
 	public static String KEY_PROCESS = "CoolTime";
 	public static int PROCESS_SPEED = 40;
 
-	private int progress;
-	private ItemHandler input;
-	private ItemHandler output;
+	protected boolean isIdle;
+	protected int idleCount;
+	protected int progress;
+	protected ItemHandler input;
+	protected ItemHandler output;
+	protected IClimate climate;
 
 	@Override
 	public ICapabilityProvider createInventoryProvider() {
@@ -70,6 +74,30 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 	@Override
 	public void update() {
 		if (world.isRemote) return;
+		if (this.isIdle) {
+			if (this.idleCount++ >= IDLE_COUNT) {
+				this.updateClimate();
+				this.idleCount = 0;
+			}
+			return;
+		} else {
+			this.updateClimate();
+			this.onProcess();
+		}
+	}
+
+	private void updateClimate() {
+		IClimate c = ClimateAPI.calculator.getClimate(world, pos);
+		if (this.climate == null ||
+				!this.climate.getHeat().equals(c.getHeat()) ||
+				!this.climate.getHumidity().equals(c.getHumidity()) ||
+				!this.climate.getAirflow().equals(c.getAirflow())) {
+			this.climate = c;
+			this.setWorking();
+		}
+	}
+
+	public void onProcess() {
 		if (!ItemHandlerUtils.isEmpty(input)) {
 			if (this.progress++ > PROCESS_SPEED) {
 				// 素材スロットに中身があればカウントを進め、カウントが溜まれば加工を試みる
@@ -78,26 +106,26 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 				this.progress = 0;
 			}
 		} else {
-			// inputが空ならばカウントをリセット
 			this.progress = 0;
-		}
-		if (ItemHandlerUtils.isEmpty(input) && !ItemHandlerUtils.isEmpty(output)) {
-			IClimate climate = ClimateAPI.calculator.getClimate(world, pos);
 			// 完成品スロットにあるものが加工可能なら差し戻し
-			ItemStack ingredient = output.getStackInSlot(0);
-			if (SmeltingHelper.canSmelting(ingredient, climate)) {
-				input.setStackInSlot(0, output.getStackInSlot(0));
-				output.setStackInSlot(0, ItemStack.EMPTY);
+			if (!ItemHandlerUtils.isEmpty(output)) {
+				ItemStack ingredient = output.getStackInSlot(0);
+				if (SmeltingHelper.canSmelting(ingredient, climate)) {
+					input.setStackInSlot(0, output.getStackInSlot(0));
+					output.setStackInSlot(0, ItemStack.EMPTY);
+					return;
+				}
 			}
+			// そうでないなら待機
+			this.setIdle();
 		}
 	}
 
 	public void processItem() {
 		ItemStack ingredient = input.getStackInSlot(0).copy();
-		IClimate climate = ClimateAPI.calculator.getClimate(world, pos);
 		ItemStack product = SmeltingHelper.onSmelting(ingredient, climate);
+		ItemStack outputStack = output.getStackInSlot(0).copy();
 		if (!product.isEmpty()) {
-			ItemStack outputStack = output.getStackInSlot(0).copy();
 			if (outputStack.isEmpty() || product.isItemEqual(outputStack)) {
 				if (product.getCount() + outputStack.getCount() <= product.getMaxStackSize()) {
 					ingredient.shrink(1);
@@ -109,7 +137,25 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 					product.grow(outputStack.getCount());
 					output.setStackInSlot(0, product);
 					this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 0.25f, 0.85f);
+					return;
 				}
+			}
+			// 加工前後でスタックサイズが違うなどして溢れた場合、インベントリに変化があるまでいったん停止
+			this.setIdle();
+		} else {
+			if (outputStack.isEmpty() || (ingredient.isItemEqual(outputStack) && outputStack.getCount() < outputStack.getMaxStackSize())) {
+				int count = Math.max(ingredient.getCount(), outputStack.getMaxStackSize() - outputStack.getCount());
+				ItemStack moved = ingredient.splitStack(count);
+				moved.grow(outputStack.getCount());
+				if (ingredient.isEmpty()) {
+					input.setStackInSlot(0, ItemStack.EMPTY);
+				} else {
+					input.setStackInSlot(0, ingredient);
+				}
+				output.setStackInSlot(0, moved);
+			} else {
+				// 気候の変化などでアイテムが溢れた場合、インベントリに変化があるまでいったん停止
+				this.setIdle();
 			}
 		}
 	}
@@ -190,11 +236,24 @@ public class TileSmeltingPlate extends TileEntity implements ITickable, ISidedTi
 
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		this.setWorking();
 		return oldState.getBlock() != newState.getBlock();
 	}
 
 	@Override
 	public void onItemHandlerChanged(IItemHandler handler, int slot) {
 		this.markDirty();
+		this.setWorking();
 	}
+
+	// 待機状態にする条件が整ったら呼ぶ
+	public void setIdle() {
+		this.isIdle = true;
+	}
+
+	// 待機状態を解除するときに呼ぶ
+	public void setWorking() {
+		this.isIdle = false;
+	}
+
 }
