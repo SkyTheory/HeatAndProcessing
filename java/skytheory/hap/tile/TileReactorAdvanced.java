@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import defeatedcrow.hac.api.climate.DCHeatTier;
 import defeatedcrow.hac.api.recipe.IReactorRecipe;
 import defeatedcrow.hac.api.recipe.RecipeAPI;
+import defeatedcrow.hac.core.fluid.FluidDictionaryDC;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -503,8 +504,11 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 
 	public void consumeFluid(FluidStack require, IFluidHandler handler) {
 		if (require == null) return;
-		FluidStack drained1 = handler.drain(require, true);
-		if (drained1 == null || drained1.amount < require.amount) {
+		FluidStack drained = handler.drain(require.amount, true);
+		if (drained == null || drained.amount < require.amount || !FluidDictionaryDC.matchFluid(require.getFluid(), drained.getFluid())) {
+			// 基本的にこの部分は呼ばれるべきではないが、万が一ここにたどり着いた場合にワールドへの再入場が不可能になる事態を避けるため、タンクの中身をリセットする
+			tankInput1.drain(Integer.MAX_VALUE, true);
+			tankInput2.drain(Integer.MAX_VALUE, true);
 			throw new RuntimeException(String.format("Unable consume fluid: %s", require.getUnlocalizedName()));
 		}
 	}
