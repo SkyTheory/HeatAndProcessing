@@ -8,7 +8,6 @@ import defeatedcrow.hac.api.energy.capability.TorqueCapabilityHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -121,14 +120,6 @@ public abstract class TileTorque extends TileEntity implements ITickable, ITorqu
 			this.setNextTorque(torque + result);
 		}
 		return amount - result;
-	}
-
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
-		compound.setFloat(KEY_TORQUE, torque);
-		compound.setFloat(KEY_PREV, prevtorque);
-		return compound;
 	}
 
 	public EnumFacing getBaseSide() {return EnumFacing.DOWN;}

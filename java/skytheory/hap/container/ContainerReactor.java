@@ -6,7 +6,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import skytheory.hap.event.TextureEvent;
 import skytheory.hap.tile.TileReactorAdvanced;
 import skytheory.lib.capability.datasync.DataSyncHandler;
 import skytheory.lib.container.ContainerPlayerInventory;
@@ -45,14 +44,15 @@ public class ContainerReactor extends ContainerPlayerInventory {
 		this.catalystSlot = this.addSlotToContainer(tile.itemCatalyst, 0, CATALYST_X, CATALYST_Y);
 		this.outputSlots = this.addSlotFromInventory(tile.itemOutput, OUTPUT_X, OUTPUT_Y, 4);
 		this.fluidContainerSlots = new ArrayList<SlotItemHandler>();
-		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotItemHandler(tile.itemFluidContainer, 0, FLUID_X, FLUID_Y_1)));
-		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotItemHandler(tile.itemFluidContainer, 1, FLUID_X, FLUID_Y_2)));
-		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotItemHandler(tile.itemFluidContainer, 2, FLUID_X, FLUID_Y_3)));
-		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotItemHandler(tile.itemFluidContainer, 3, FLUID_X, FLUID_Y_4)));
+		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotContainerReactorBucket(this, tile.itemFluidContainer, 0, FLUID_X, FLUID_Y_1)));
+		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotContainerReactorBucket(this, tile.itemFluidContainer, 1, FLUID_X, FLUID_Y_2)));
+		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotContainerReactorBucket(this, tile.itemFluidContainer, 2, FLUID_X, FLUID_Y_3)));
+		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotContainerReactorBucket(this, tile.itemFluidContainer, 3, FLUID_X, FLUID_Y_4)));
+		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotContainerReactorBucket(this, tile.itemFluidContainer, 4, FLUID_X, FLUID_Y_1)));
+		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotContainerReactorBucket(this, tile.itemFluidContainer, 5, FLUID_X, FLUID_Y_2)));
+		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotContainerReactorBucket(this, tile.itemFluidContainer, 6, FLUID_X, FLUID_Y_3)));
+		this.fluidContainerSlots.add(this.addSlotToContainer(new SlotContainerReactorBucket(this, tile.itemFluidContainer, 7, FLUID_X, FLUID_Y_4)));
 		this.filterSlots = this.addFilterFromInventory(tile.itemFilter, FILTER_X, FILTER_Y, 4);
-
-		this.catalystSlot.setTexture(TextureEvent.TEXTURE_CATALYST);
-		this.fluidContainerSlots.forEach(slot -> slot.setTexture(TextureEvent.TEXTURE_BUCKET));
 		for (SlotItemHandler output : outputSlots) {
 			output.setFilter(stack -> false);
 		}
@@ -65,6 +65,18 @@ public class ContainerReactor extends ContainerPlayerInventory {
 		if (!this.tile.getWorld().isRemote) {
 			TileSync.sendToClient(this.tile, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
 			TileSync.sendToClient(this.tile, DataSyncHandler.SYNC_DATA_CAPABILITY);
+		}
+	}
+
+	protected void updateBucketSlot() {
+		for (int i = 0; i < 4; i++) {
+			if (tile.itemFluidContainer.getStackInSlot(i + 4).isEmpty()) {
+				this.fluidContainerSlots.get(i).enable();
+				this.fluidContainerSlots.get(i + 4).disable();
+			} else {
+				this.fluidContainerSlots.get(i).disable();
+				this.fluidContainerSlots.get(i + 4).enable();
+			}
 		}
 	}
 

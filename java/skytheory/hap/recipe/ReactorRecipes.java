@@ -35,7 +35,7 @@ public class ReactorRecipes {
 					OreDictionary.getOres("dustSulfur"),
 					OreDictionary.getOres("dustMana")
 					)
-			.catalyst(new ItemStack(MagicInit.timeCage, 1, 0))
+			.catalyst(new ItemStack(MagicInit.timeCage, 1, 0), new ItemStack(MagicInit.timeCage, 1, 1), new ItemStack(MagicInit.timeCage, 1, 2), new ItemStack(MagicInit.timeCage, 1, 3))
 			.heatTier(Arrays.asList(DCHeatTier.FROSTBITE, DCHeatTier.SMELTING))
 			.build();
 

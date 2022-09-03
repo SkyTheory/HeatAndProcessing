@@ -145,7 +145,14 @@ public class BlockReactorFluidPort extends BlockContainer implements IWrenchBloc
 	@Override
 	public void onRightClickWithWrench(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side) {
 		if (player.isSneaking()) {
-			WrenchHelper.invertFacing(world, pos);
+			TileEntity tile = world.getTileEntity(pos);
+			if (tile instanceof TileReactorFluidPort) {
+				TileReactorFluidPort port = (TileReactorFluidPort) tile;
+				EnumSide eside = port.getSide(side);
+				if (eside == EnumSide.TOP || eside == EnumSide.BACK || eside == EnumSide.BOTTOM) {
+					port.cycleMode(eside);
+				}
+			}
 		} else {
 			WrenchHelper.rotateFacing(world, pos, EnumFacing.UP);
 		}
@@ -163,7 +170,7 @@ public class BlockReactorFluidPort extends BlockContainer implements IWrenchBloc
 		EnumFacing right = EnumRotation.fromFacing(facing).getFacing(EnumSide.RIGHT);
 		BlockPos rightPos = pos.offset(right);
 		if (!rightPos.equals(neighbor)) {
-			if (world.getBlockState(rightPos).getBlock() == this) {
+			if (world.getBlockState(rightPos).getBlock() instanceof BlockReactorFluidPort) {
 				if (world.getBlockState(rightPos).getValue(FACING) != facing) {
 					return;
 				}
@@ -179,7 +186,8 @@ public class BlockReactorFluidPort extends BlockContainer implements IWrenchBloc
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Requirement ===");
 			tooltip.add(DCName.NON_POWERED.getLocalizedName());
 			tooltip.add(TextFormatting.YELLOW.toString() + TextFormatting.BOLD.toString() + "=== Tips ===");
-			tooltip.add(I18n.format(ConstantsHaP.TIP_REACTOR_FLUIDPORT));
+			tooltip.add(I18n.format(ConstantsHaP.TIP_REACTOR_FLUIDPORT1));
+			tooltip.add(I18n.format(ConstantsHaP.TIP_REACTOR_FLUIDPORT2));
 		} else {
 			tooltip.add(TextFormatting.ITALIC.toString() + "=== Lshift key: expand tooltip ===");
 		}

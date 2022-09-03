@@ -11,6 +11,7 @@ import defeatedcrow.hac.food.FoodInit;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -32,6 +33,8 @@ import skytheory.lib.network.CapsSyncManager;
 
 public class CommonProxy {
 
+	public static String PATH = Loader.instance().getConfigDir().getPath() + "/HeatAndProcessing";
+
 	public void registerModels(ModelRegistryEvent event) {
 	}
 
@@ -45,8 +48,7 @@ public class CommonProxy {
 		}
 		ResourceRegister.registerTiles(TileEntitiesHaP.class, HeatAndProcessing.MOD_ID);
 		NetworkRegistry.INSTANCE.registerGuiHandler(HeatAndProcessing.INSTANCE, GuiHandler.INSTANCE);
-		File directory = event.getModConfigurationDirectory();
-		Configuration config = new Configuration(new File(directory.getPath(), "HeatAndProcessing.cfg"));
+		Configuration config = new Configuration(new File(PATH, "main.cfg"));
 		HaPConfig.init(config);
 	}
 
@@ -71,4 +73,5 @@ public class CommonProxy {
 			if (HaPConfig.recipe_reactor) ReactorRecipes.register();
 		}
 	}
+
 }

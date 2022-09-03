@@ -33,7 +33,8 @@ public class ConstantsHaP {
 	public static final String TIP_PLATE3 = "hap.tip.smelting_plate3";
 
 	public static final String TIP_REACTOR = "hap.tip.reactor.advanced";
-	public static final String TIP_REACTOR_FLUIDPORT = "hap.tip.reactor_fluidport";
+	public static final String TIP_REACTOR_FLUIDPORT1 = "hap.tip.reactor_fluidport1";
+	public static final String TIP_REACTOR_FLUIDPORT2 = "hap.tip.reactor_fluidport2";
 	public static final String TIP_REACTOR_STORAGE = "hap.tip.reactor_storage";
 
 	public static final String TIP_AMOUNT = "hap.tip.fluid.amount";

@@ -34,7 +34,7 @@ public class LoadingPlugin implements IFMLLoadingPlugin {
 			file = (File) data.get("mcLocation");
 		}
 		if (file != null) {
-			Configuration config = new Configuration(new File(file, "config/HeatAndProcessingASM.cfg"));
+			Configuration config = new Configuration(new File(file, "config/HeatAndProcessing/asm.cfg"));
 			HaPASMConfig.init(config);
 		}
 	}

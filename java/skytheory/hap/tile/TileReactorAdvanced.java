@@ -101,14 +101,10 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	private boolean[] tankLock = {false, false, false, false};
 	private FluidStack[] tankFilter = new FluidStack[4];
 
-	public boolean skipTransport = false;
 	public boolean skipInputItem = false;
 	public boolean skipOutputItem = false;
 	public boolean skipInputFluid = false;
 	public boolean skipOutputFluid = false;
-	// インベントリに変更があるまで流体のアイテム・タンク間の輸送をスキップするフラグ
-	public boolean skipInternalTank = false;
-	public boolean[] skipInternalTanks = {true, true, true, true};
 	// 出力先に空きができるまで加工をスキップするフラグ
 	public boolean skipProcessItem;
 	// レシピ判定をスキップするフラグ
@@ -138,9 +134,13 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		this.itemOutput = new ItemHandler(4)
 				.addListener(this);
 
-		this.itemFluidContainer = new ItemHandler(4)
+		this.itemFluidContainer = new ItemHandler(8)
 				.setCanInsert((slot, stack) -> {
-					return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+					if (slot >= 4) return false;
+					if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+						return itemFluidContainer.getStackInSlot(slot + 4).isEmpty();
+					}
+					return false;
 				})
 				.setSlotLimit(1)
 				.addListener(this);
@@ -255,14 +255,12 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	public void update() {
 		super.update();
 		if (!world.isRemote) {
-			this.updateInternalTank();
-			if (skipTransport) {
+			if (skipInputItem && skipOutputItem && skipInputFluid && skipOutputFluid) {
 				// レシピが利用できるか、変更されていないかをチェック
 				this.updateProcessing();
 			} else {
-				this.skipTransport = true;
 				EnumFacing facing = this.getFacing(EnumSide.LEFT);
-				TileEntity tile = world.getTileEntity(this.getPos().offset(this.getFacing(EnumSide.LEFT)));
+				TileEntity tile = world.getTileEntity(this.getPos().offset(facing));
 				// 内部タンクのインベントリへ液体受け渡し
 				if (tile != null) {
 					IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
@@ -281,9 +279,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 	public void updateInput(IItemHandler itemHandler, IFluidHandler fluidHandler) {
 		if (!skipInputItem && itemHandler != null) {
 			this.skipInputItem = true;
-			if (!ItemHandlerUtils.isEmpty(itemFilter)) {
-				retrieveItem(itemHandler);
-			}
+			retrieveItem(itemHandler);
 		}
 		if (!skipInputFluid && fluidHandler != null) {
 			this.skipInputFluid = true;
@@ -310,18 +306,7 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		FluidUtil.tryFluidTransfer(tank, handler, fs, true);
 	}
 
-	public void updateInternalTank() {
-		if (skipInternalTank) return;
-		for (int i = 0; i < tanks.length; i++) {
-			if (!skipInternalTanks[i]) {
-				this.transferFluid(i);
-				this.skipInternalTanks[i] = true;
-			}
-		}
-		this.skipInternalTank = true;
-	}
-
-	public void transferFluid(int index) {
+	public void handleFluidItem(int index) {
 		ItemStack stack = this.itemFluidContainer.getStackInSlot(index).copy();
 		if (!stack.isEmpty()) {
 			IFluidHandlerItem itemFluid = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
@@ -332,7 +317,8 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 				if (tanks[index].getFluidAmount() == amount) {
 					stack = drainTank(stack, index);
 				}
-				((IItemHandlerModifiable) this.itemFluidContainer).setStackInSlot(index, stack);
+				((IItemHandlerModifiable) this.itemFluidContainer).setStackInSlot(index, ItemStack.EMPTY);
+				((IItemHandlerModifiable) this.itemFluidContainer).setStackInSlot(index + 4, stack);
 			}
 		}
 	}
@@ -375,7 +361,6 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 						this.progress = Math.max(progress - 16.0f, 0.0f);
 					}
 					if (skipProcessItem && freq.shouldUpdate()) {
-						this.skipTransport = false;
 						this.skipOutputItem = false;
 						this.skipOutputFluid = false;
 					}
@@ -394,7 +379,6 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 				}
 			} else {
 				if (freq.shouldUpdate()) {
-					this.skipTransport = false;
 					this.skipInputItem = false;
 					this.skipInputFluid = false;
 				}
@@ -628,8 +612,9 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 		this.markDirty();
 		if (!world.isRemote) {
 			if (handler == this.itemFluidContainer) {
-				this.skipInternalTank = false;
-				this.skipInternalTanks[slot] = false;
+				if (slot < 4) {
+					this.handleFluidItem(slot);
+				}
 			}
 			if (handler == this.itemInput) {
 				this.skipInputItem = false;
@@ -638,7 +623,6 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 				this.skipOutputItem = false;
 				this.skipProcessItem = false;
 			}
-			this.skipTransport = false;
 			this.skipRecipe = false;
 			TileSync.sendToClient(this, CapabilityItemHandler.ITEM_HANDLER_CAPABILITY);
 		}
@@ -655,7 +639,6 @@ public class TileReactorAdvanced extends TileTorqueDirectional implements ITicka
 				this.skipOutputFluid = false;
 				this.skipProcessItem = false;
 			}
-			this.skipTransport = false;
 			this.skipRecipe = false;
 			TileSync.sendToClient(this, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY);
 		}

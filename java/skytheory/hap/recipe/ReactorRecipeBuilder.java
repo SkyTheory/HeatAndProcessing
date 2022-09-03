@@ -52,8 +52,12 @@ public class ReactorRecipeBuilder {
 
 	@SafeVarargs
 	public final ReactorRecipeBuilder inputItem(List<ItemStack>... input) {
+		return inputItem(Arrays.asList(input));
+	}
+
+	public final ReactorRecipeBuilder inputItem(List<List<ItemStack>> input) {
 		// 覚書：HeatAndClimateのリアクターはArrayListのみ受け付けるっぽい
-		this.inputItems = Arrays.stream(input).map(ArrayList<ItemStack>::new).collect(Collectors.toList());;
+		this.inputItems = input.stream().map(ArrayList<ItemStack>::new).collect(Collectors.toList());
 		return this;
 	}
 
@@ -80,8 +84,8 @@ public class ReactorRecipeBuilder {
 		return this;
 	}
 
-	public ReactorRecipeBuilder catalyst(ArrayList<ItemStack> catalysts) {
-		this.catalysts = catalysts;
+	public ReactorRecipeBuilder catalyst(List<ItemStack> catalysts) {
+		this.catalysts = catalysts.stream().filter(s -> !s.isEmpty()).collect(Collectors.toList());
 		return this;
 	}
 
